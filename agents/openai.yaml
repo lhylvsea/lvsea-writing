@@ -1,7 +1,7 @@
 interface:
   display_name: "Lvsea Writing"
-  short_description: "面向制造管理与专业内容的中文事实写作、自然表达与去AI味终稿助手"
-  default_prompt: "使用 $lvsea-writing，把这份材料写得自然、具体、可信，并按场景保留必要结构。"
+  short_description: "中文事实写作、风格校准、AI痕迹审校与深度长文工作流助手"
+  default_prompt: "使用 $lvsea-writing，先判断任务规模与事实边界，再按场景写得自然、具体、可信，并完成终稿复查。"
 
 policy:
   allow_implicit_invocation: true

@@ -32,6 +32,29 @@ class CheckWritingTests(unittest.TestCase):
         result = scan_text(text, scenario="professional")
         self.assertFalse(result.failures)
 
+    def test_metrics_are_review_signals(self):
+        text = "这是第一句，用来提供背景。第二句补充一个动作和条件。第三句说明结果，以及还没有确认的部分。"
+        result = scan_text(text, scenario="professional")
+        self.assertIn("type_token_ratio", result.metrics)
+        self.assertIn("repeated_trigram_ratio", result.metrics)
+        self.assertGreater(result.metrics["token_count"], 0)
+
+    def test_placeholder_and_reasoning_scaffolding_are_warnings(self):
+        result = scan_text("TODO: INSERT SOURCE。Breaking this down, we need to start by checking it.")
+        categories = {item.category for item in result.warnings}
+        self.assertIn("占位符", categories)
+        self.assertIn("推理脚手架", categories)
+
+    def test_hidden_unicode_is_reported_without_hard_failure(self):
+        result = scan_text("这段文字含有\u200b不可见字符，但仍然可以阅读。")
+        self.assertFalse(result.failures)
+        self.assertIn("隐藏字符", {item.category for item in result.warnings})
+
+    def test_english_text_is_analyzable(self):
+        result = scan_text("The team changed the inspection order and recorded the result.")
+        self.assertFalse(result.failures)
+        self.assertGreater(result.metrics["token_count"], 0)
+
 
 if __name__ == "__main__":
     unittest.main()

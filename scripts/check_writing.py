@@ -13,6 +13,7 @@ import json
 import math
 import re
 import sys
+import unicodedata
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
@@ -31,6 +32,8 @@ HARD_RESIDUE = (
     "ppl-ai-file-upload",
     "Here is the revised version",
     "好的，下面是",
+    "以下是修改后的",
+    "以下是改写后的",
     "很好的问题",
     "你完全正确",
     "希望这对你有帮助",
@@ -136,6 +139,44 @@ REPEATED_OPENERS = (
     "更重要的是",
 )
 
+PLACEHOLDER_PATTERNS = (
+    re.compile(r"\b(?:TODO|TBD|FIXME|INSERT\s+(?:SOURCE|DETAILS?)|YOUR\s+(?:NAME|TOPIC|TEXT))\b", re.IGNORECASE),
+    re.compile(r"\b20\d{2}-(?:XX|MM|DD)(?:-(?:XX|MM|DD))?\b", re.IGNORECASE),
+    re.compile(r"\[[^\]\n]{1,36}(?:your|insert|placeholder|fill|name|date|source)[^\]\n]{0,36}\]", re.IGNORECASE),
+    re.compile(r"(?:待补充|待填写|待核实|占位符)", re.IGNORECASE),
+)
+
+REASONING_ARTIFACT_PATTERNS = (
+    re.compile(r"\b(?:let me think|i(?:'ll| will) start by|breaking this down|step\s+\d+|first,?\s+i(?:'ll| will))\b", re.IGNORECASE),
+    re.compile(r"(?:下面是修改后的|以下是改写后的|接下来我(?:们)?(?:将|来)|让我(?:们)?先(?:看|梳理))"),
+)
+
+FALSE_AGENCY_TERMS = (
+    "数据告诉我们",
+    "市场奖励",
+    "算法决定",
+    "数字说明",
+    "the data tells us",
+    "the market rewards",
+    "the numbers prove",
+    "the algorithm decided",
+)
+
+HOOK_TERMS = (
+    "你可能会问",
+    "答案是",
+    "你是否也",
+    "听起来很熟悉",
+    "the catch?",
+    "here's the thing",
+    "the brutal truth",
+    "sound familiar?",
+)
+
+LATIN_WORD_PATTERN = re.compile(r"[A-Za-z]+(?:'[A-Za-z]+)?")
+METRIC_TOKEN_PATTERN = re.compile(r"[\u4e00-\u9fff]|[A-Za-z]+(?:'[A-Za-z]+)?|\d+(?:\.\d+)?")
+SUSPICIOUS_CODEPOINTS = {0x00AD, 0x200B, 0x200C, 0x200D, 0x2060, 0xFEFF}
+
 
 @dataclass
 class Finding:
@@ -151,6 +192,7 @@ class ScanResult:
     scenario: str
     failures: list[Finding]
     warnings: list[Finding]
+    metrics: dict[str, int | float | None]
 
     @property
     def exit_code(self) -> int:
@@ -159,6 +201,52 @@ class ScanResult:
 
 def han_count(text: str) -> int:
     return len(re.findall(r"[\u4e00-\u9fff]", text))
+
+
+def content_unit_count(text: str) -> int:
+    """Count Chinese characters plus Latin words so English can be reviewed too."""
+
+    return han_count(text) + len(LATIN_WORD_PATTERN.findall(text))
+
+
+def tokenize_for_metrics(text: str) -> list[str]:
+    return METRIC_TOKEN_PATTERN.findall(text)
+
+
+def coefficient_of_variation(values: list[int]) -> float | None:
+    if len(values) < 2:
+        return None
+    mean = sum(values) / len(values)
+    if not mean:
+        return None
+    variance = sum((value - mean) ** 2 for value in values) / len(values)
+    return math.sqrt(variance) / mean
+
+
+def compute_metrics(text: str) -> dict[str, int | float | None]:
+    """Return review signals, never an authorship verdict."""
+
+    tokens = tokenize_for_metrics(text)
+    trigrams = [tuple(tokens[index : index + 3]) for index in range(len(tokens) - 2)]
+    sentence_values = [
+        content_unit_count(match.group())
+        for match in sentences(text)
+        if content_unit_count(match.group()) >= 4
+    ]
+    unique_tokens = len(set(token.casefold() for token in tokens))
+    repeated_trigram_ratio = 0.0
+    if trigrams:
+        repeated_trigram_ratio = 1 - (len(set(trigrams)) / len(trigrams))
+    return {
+        "content_units": content_unit_count(text),
+        "token_count": len(tokens),
+        "sentence_count": len(sentences(text)),
+        "sentence_cv": coefficient_of_variation(sentence_values),
+        "type_token_ratio": unique_tokens / len(tokens) if tokens else 0.0,
+        "repeated_trigram_ratio": repeated_trigram_ratio,
+        "paragraph_count": len(paragraph_blocks(text)),
+        "four_char_run_count": len(re.findall(r"[\u4e00-\u9fff]{4,}", text)),
+    }
 
 
 def line_number(text: str, position: int) -> int:
@@ -210,6 +298,41 @@ def pattern_matches(text: str, patterns: tuple[re.Pattern[str], ...]) -> list[re
     return sorted(matches, key=lambda match: match.start())
 
 
+def add_pattern_findings(
+    findings: list[Finding],
+    source_text: str,
+    prose: str,
+    patterns: tuple[re.Pattern[str], ...],
+    category: str,
+    message: str,
+) -> None:
+    for match in pattern_matches(prose, patterns):
+        findings.append(
+            Finding(
+                category,
+                line_number(source_text, match.start()),
+                message,
+                excerpt(match.group()),
+            )
+        )
+
+
+def add_unicode_findings(findings: list[Finding], source_text: str, prose: str) -> None:
+    for position, char in enumerate(prose):
+        codepoint = ord(char)
+        category = unicodedata.category(char)
+        if codepoint in SUSPICIOUS_CODEPOINTS or (category == "Cf" and char not in "\n\r\t"):
+            name = unicodedata.name(char, f"U+{codepoint:04X}")
+            findings.append(
+                Finding(
+                    "隐藏字符",
+                    line_number(source_text, position),
+                    f"发现不可见或格式控制字符 {name}，检查是否为复制残留或 Unicode 混淆",
+                    f"U+{codepoint:04X}",
+                )
+            )
+
+
 def sentences(text: str) -> list[re.Match[str]]:
     return list(re.finditer(r"[^。！？!?\n]+[。！？!?]", text))
 
@@ -225,7 +348,7 @@ def paragraph_blocks(text: str) -> list[tuple[int, str]]:
             continue
         if re.match(r"^(?:[-+*]|\d+[.、])\s", clean):
             continue
-        if han_count(clean) >= 4:
+        if content_unit_count(clean) >= 4:
             blocks.append((position, clean))
     return blocks
 
@@ -246,6 +369,7 @@ def scan_text(text: str, scenario: str = "general", texture: bool = False) -> Sc
     total_han = han_count(prose)
     failures: list[Finding] = []
     warnings: list[Finding] = []
+    metrics = compute_metrics(prose)
 
     add_term_findings(failures, prose, HARD_RESIDUE, "机器残留", "删除复制自聊天或搜索模型的框架")
     add_term_findings(failures, prose, HARD_STOPS, "套话", "改成直接陈述")
@@ -272,6 +396,14 @@ def scan_text(text: str, scenario: str = "general", texture: bool = False) -> Sc
             )
         )
 
+    add_term_findings(
+        warnings,
+        prose,
+        ROAD_SIGNS,
+        "路标词",
+        "检查是否能直接进入事实或判断，避免用教程式连接词推进每一段",
+    )
+
     for position, term in term_matches(prose, UNSOURCED_AUTHORITY):
         warnings.append(
             Finding(
@@ -291,6 +423,81 @@ def scan_text(text: str, scenario: str = "general", texture: bool = False) -> Sc
                 excerpt(match.group()),
             )
         )
+
+    add_pattern_findings(
+        warnings,
+        text,
+        prose,
+        PLACEHOLDER_PATTERNS,
+        "占位符",
+        "补齐或删除占位内容，不要把内部草稿标记交付给读者",
+    )
+    add_pattern_findings(
+        warnings,
+        text,
+        prose,
+        REASONING_ARTIFACT_PATTERNS,
+        "推理脚手架",
+        "删除面向模型的过程说明，只保留面向读者的正文",
+    )
+    add_term_findings(
+        warnings,
+        prose,
+        FALSE_AGENCY_TERMS,
+        "拟人化归因",
+        "给数据、市场或算法补上真实主体和证据，避免把结果写成主动意志",
+    )
+    add_term_findings(
+        warnings,
+        prose,
+        HOOK_TERMS,
+        "公式化钩子",
+        "检查是否真的需要设问或悬念，不要用标准钩子替代具体事实",
+    )
+    add_unicode_findings(warnings, text, prose)
+
+    if scenario == "social":
+        for match in re.finditer(r"(?m)^\s{0,3}(?:#{1,6}\s|[-*+]\s|\d+[.)、]\s)", prose):
+            warnings.append(
+                Finding(
+                    "格式痕迹",
+                    line_number(text, match.start()),
+                    "社交短帖中检查 Markdown 或列表是否服务于扫描，避免把提示词排版原样交付",
+                    excerpt(match.group()),
+                )
+            )
+
+    if metrics["token_count"] < 40 and metrics["content_units"]:
+        warnings.append(
+            Finding(
+                "样本长度",
+                1,
+                "文本过短，统计信号和 AI 痕迹判断置信度有限，优先人工核对语境",
+                f"内容单元 {metrics['content_units']}",
+            )
+        )
+
+    if metrics["token_count"] >= 80:
+        repeated_ratio = float(metrics["repeated_trigram_ratio"] or 0)
+        type_token_ratio = float(metrics["type_token_ratio"] or 0)
+        if repeated_ratio >= 0.08:
+            warnings.append(
+                Finding(
+                    "重复度信号",
+                    1,
+                    f"三元组重复比例约 {repeated_ratio:.1%}，检查是否存在模板化句群或反复措辞",
+                    "统计信号，不是作者身份结论",
+                )
+            )
+        if type_token_ratio <= 0.40:
+            warnings.append(
+                Finding(
+                    "词汇多样性信号",
+                    1,
+                    f"类型词占比约 {type_token_ratio:.1%}，检查是否过度重复同一批词",
+                    "统计信号，不是作者身份结论",
+                )
+            )
 
     if not texture:
         for symbol in ("—", "–", "…"):
@@ -317,7 +524,7 @@ def scan_text(text: str, scenario: str = "general", texture: bool = False) -> Sc
                 )
             )
 
-    sentence_lengths = [han_count(match.group()) for match in sentences(prose) if han_count(match.group()) >= 4]
+    sentence_lengths = [content_unit_count(match.group()) for match in sentences(prose) if content_unit_count(match.group()) >= 4]
     if len(sentence_lengths) >= 12:
         mean = sum(sentence_lengths) / len(sentence_lengths)
         variance = sum((value - mean) ** 2 for value in sentence_lengths) / len(sentence_lengths)
@@ -366,7 +573,7 @@ def scan_text(text: str, scenario: str = "general", texture: bool = False) -> Sc
                 )
             )
 
-    return ScanResult(total_han, scenario, failures, warnings)
+    return ScanResult(total_han, scenario, failures, warnings, metrics)
 
 
 def load_text(path: str) -> str:
@@ -381,6 +588,7 @@ def print_report(result: ScanResult, as_json: bool) -> None:
         return
 
     print(f"汉字数：{result.han_count}")
+    print(f"内容单元：{result.metrics['content_units']}；句子：{result.metrics['sentence_count']}；段落：{result.metrics['paragraph_count']}")
     print(f"场景：{result.scenario}")
     print(f"必须修改：{len(result.failures)} 项；需要人工判断：{len(result.warnings)} 项")
     if result.failures:
@@ -396,7 +604,7 @@ def print_report(result: ScanResult, as_json: bool) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="检查中文写作中的高置信 AI 残留和需要人工判断的表达风险")
+    parser = argparse.ArgumentParser(description="检查中英文写作中的高置信 AI 残留和需要人工判断的表达风险")
     parser.add_argument("path", help="Markdown 或文本文件路径，使用 - 从标准输入读取")
     parser.add_argument("--scenario", choices=("general", "professional", "social", "script"), default="general")
     parser.add_argument("--texture", action="store_true", help="允许温暖质感模式，减少标点痕迹提醒")
@@ -409,8 +617,8 @@ def main() -> int:
         print(f"无法读取稿件：{error}", file=sys.stderr)
         return 2
 
-    if han_count(mask_non_prose(text)) == 0:
-        print("没有检测到汉字。", file=sys.stderr)
+    if content_unit_count(mask_non_prose(text)) == 0:
+        print("没有检测到可分析正文。", file=sys.stderr)
         return 2
 
     result = scan_text(text, args.scenario, args.texture)
