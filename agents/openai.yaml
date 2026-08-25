@@ -1,7 +1,7 @@
 interface:
   display_name: "Lvsea Writing"
   short_description: "中文事实写作、风格校准、AI痕迹审校与深度长文工作流助手"
-  default_prompt: "使用 $lvsea-writing，先判断任务规模与事实边界，再按场景写得自然、具体、可信，并完成终稿复查。"
+  default_prompt: "使用 $lvsea-writing，先锁定写作契约，按资料、结构、读者、声音和场景推进，初稿完成后最后一步去 AI 味，并完成作者人工终审门。"
 
 policy:
   allow_implicit_invocation: true

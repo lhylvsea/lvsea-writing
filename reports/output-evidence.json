@@ -1,0 +1,10 @@
+{
+  "evidence_kind": "static_validation",
+  "status": "missing_provider_or_human_evidence",
+  "note": "This package currently has source review, trigger, package and local checker evidence only. It does not claim provider-backed writing quality or human-blind voice evidence.",
+  "next_evidence": [
+    "run one real long-form writing task through the installed skill",
+    "record author final-gate decisions",
+    "optionally collect blind held-out comparisons without exposing the reference during drafting"
+  ]
+}

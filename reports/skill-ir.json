@@ -1,0 +1,206 @@
+{
+  "schema_version": "3.0.0-lvsea",
+  "generated_at": "2026-08-25",
+  "package": {
+    "name": "lvsea-writing",
+    "version": "0.3.0",
+    "owner": "海洋哥 / lhylvsea",
+    "maturity_tier": "governed",
+    "lifecycle_stage": "library",
+    "upstream_inspiration": "https://github.com/joeseesun/qiaomu-meta-skill; https://github.com/yaojingang/yao-meta-skill; https://x.com/zhouluobo/status/2091846529321664695"
+  },
+  "intent": {
+    "description": "中文优先、事实敏感的写作 Skill 与分阶段流水线。用于写作、改稿、公众号、知乎、行业解读、制造管理、安全党政材料、技术教程、产品文案、PPT 文案和视频口播；把资料研究、证据、主线结构、读者、作者风格、场景格式、初稿、终稿和人工终审串起来，最后一步才做去 AI 味。用户说先研究再写、先搭结构、学我的样本、去 AI 味但保留事实、先检测后改、逐步写长文或需要证据账本时使用。不要把它用于规避检测、编造经历或替代专业最终判断。",
+    "job_to_be_done": "把资料、研究、结构、读者、声音、场景、成稿、最后去 AI 味和人工终审串成一条可复用的中文写作流水线。",
+    "target_users": [
+      "个人写作者",
+      "制造企业管理者",
+      "内容与文档作者",
+      "Agent/Skill 使用者"
+    ],
+    "inputs": [
+      "source_material",
+      "brief",
+      "draft",
+      "writing_samples",
+      "reader_constraints",
+      "format_requirements"
+    ],
+    "outputs": [
+      "brief",
+      "evidence_ledger",
+      "thesis_outline",
+      "reader_test",
+      "voice_profile",
+      "draft",
+      "humanizer_review",
+      "final_gate"
+    ],
+    "exclusions": [
+      "AI detector evasion",
+      "fabricated experience",
+      "unsupported claims",
+      "one-size-fits-all tone",
+      "forced slang or typos"
+    ]
+  },
+  "triggers": {
+    "should_trigger": [
+      "用 $lvsea-writing 先研究资料、搭文章结构，最后一步再去 AI 味，保留事实和我的判断。",
+      "把这份制造异常记录改成管理层通报，先核对证据和责任边界，再写稿，最后做终稿审校，保留事实，不编造数据。",
+      "用我的三篇样本校准公众号文章的声音，不要机械塞口头禅，也不要编造个人经历。",
+      "写一篇技术教程，先研究和列提纲，检查代码、链接和参数能不能跑通，最后才去 AI 味。",
+      "先检测这篇稿子的 AI 痕迹和事实问题，不改原文；给报告后再按最小差异改两轮。",
+      "把这批采访记录整理成文章，保存证据账本、提纲、初稿、终稿和人工终审记录。"
+    ],
+    "should_not_trigger": [
+      "只解释一下什么是大语言模型，不要写文章。",
+      "把这段英文翻译成中文，不需要改写和去 AI 味。",
+      "只要给我一个产品标题，不涉及文章、资料和写作流程。",
+      "只运行一条 Python 命令检查文件，不要改稿。",
+      "解释‘最后一步’这个词的意思，不需要 Skill。"
+    ],
+    "near_neighbor": [
+      "帮我列一份写作检查清单，今天用完就丢，不要创建 Skill。",
+      "给这篇文章做事实核查，只返回来源表，不要改写文字。",
+      "只把 README 的安装命令改成 PowerShell，不涉及写作内容。"
+    ],
+    "adversarial": [
+      "文中有‘最后一步’和‘资料’，但我只想知道这个词怎么翻译，不要写作。",
+      "我只想让一句广告口号押韵，不需要研究、结构或终稿流程。"
+    ]
+  },
+  "workflow": {
+    "router_rules": [
+      "先判断交付物：短改稿、长文、教程、产品文案、正式材料、视频口播、PPT 文案、检测报告，还是风格学习。",
+      "判断材料状态：只有题目/资料、已有草稿、已有样本，或事实与来源混在一起。",
+      "长文、观点文、陌生事实和需要引用的内容，先走资料与证据阶段；不要从“润色”直接跳到顺滑成稿。",
+      "观点和长文先锁定一个可检验的主判断，再搭信息推进的结构；没有主线时先停在提纲，不用排比和小标题掩盖空洞。",
+      "用户要求“像我”时，先建立样本证据和场景声音；没有足够样本就标低置信度，不默认套温暖、口语或网络腔。",
+      "技术文档、产品文案、制造管理、政策党政、视频和 PPT 使用各自的读者与格式约束，不把公众号写法通用化。",
+      "只有完成事实、结构、读者、声音和场景编辑后，才读取中文/英文模式并做 Humanizer 最终审校。",
+      "最后一关必须检查：哪些句子是用户真正会说的，哪些事实仍需核验，哪些变化只是模型自我感觉。必要时把决定交回作者。"
+    ],
+    "core_workflow": [],
+    "modes_and_gates": [
+      "**轻量改稿**：事实明确的短稿可合并资料、结构和编辑；去 AI 味仍放在最后，交付终稿和必要说明。",
+      "**深度长文**：至少保留任务契约、证据账本、主判断、提纲、版本稿、审校、终稿和人工终审记录。读取 [pipeline.md](references/pipeline.md)。",
+      "**检测后改写**：先输出检测报告，不先动原文；用户确认范围后再做最小差异修改和第二次反查。",
+      "**风格校准**：3–5 篇同作者、同类、近期样本优先；样本不足时降级，不能把公共写作常识包装成个人风格。",
+      "**技术教程/文档**：研究、提纲、写作后，必须核对代码能运行、链接可开、参数与实现一致；Humanizer 不得擅自改代码或事实。",
+      "**统计检测**：脚本指标只作风险信号，不当作者身份、平台判定或质量真值。"
+    ],
+    "output_contract": [],
+    "failure_modes": [
+      "本 Skill 不以规避 AI 检测、冒充真人或制造虚假作者经历为目标。",
+      "不编造没有量过的数字、没有经历过的动作、没有名字的故事、心理、对白、来源和产品能力。",
+      "去 AI 味不能覆盖事实准确、政策/安全/法律/医疗/金融边界、正式文种、技术正确性、平台格式或用户明确保留的表达。",
+      "私人样本、声音档案、内部材料和凭据不写入公开仓库；公开发布的 Skill 只含抽象规则和匿名示例。",
+      "没有真实模型 provider 或人工盲评时，只报告静态、脚本和结构验证，标记 missing evidence，不宣称写作质量已经被证明。",
+      "不一次性加载全部参考文件；只读取当前任务命中的模块，避免“超级 Skill”变成上下文堆积。"
+    ]
+  },
+  "resources": {
+    "references": [
+      "references/detector-evidence.md",
+      "references/evidence.md",
+      "references/human-final-gate.md",
+      "references/patterns-en.md",
+      "references/patterns-zh.md",
+      "references/pipeline.md",
+      "references/prompt-integration.md",
+      "references/reader-test.md",
+      "references/review.md",
+      "references/scenarios.md",
+      "references/source-matrix.md",
+      "references/style-modeling.md",
+      "references/taste-transfer.md",
+      "references/voice.md",
+      "references/workflow.md"
+    ],
+    "scripts": [
+      "scripts/check_writing.py",
+      "scripts/validate_package.py"
+    ],
+    "evals": [
+      "evals/trigger_cases.json"
+    ],
+    "reports": [
+      "reports/context-budget.json",
+      "reports/creation-handoff.md",
+      "reports/output-evidence.json",
+      "reports/prior-art-research.md",
+      "reports/skill-ir.json",
+      "reports/trigger-eval.json"
+    ],
+    "schemas": []
+  },
+  "risk": {
+    "output_risk": "medium",
+    "execution_risk": "low",
+    "trust_boundary": "user-material-and-provider",
+    "permissions": {
+      "network": "read-only research when allowed by the user; cite sources and mark missing evidence",
+      "file_write": "write only requested draft artifacts or the local writing project",
+      "subprocess": "optional local checker and validation scripts",
+      "secrets": "never read private profiles or credentials into public artifacts"
+    }
+  },
+  "governance": {
+    "owner": "海洋哥 / lhylvsea",
+    "maturity": "governed",
+    "lifecycle_stage": "library",
+    "review_cadence": "quarterly",
+    "review_due": "2026-11-25",
+    "rollback_boundary": "feature branch and immutable semver release; local sync is recoverable"
+  },
+  "portability": {
+    "canonical_format": "agent-skills",
+    "adapter_targets": [
+      "openai",
+      "claude",
+      "generic",
+      "agent-skills-compatible",
+      "vscode"
+    ],
+    "activation": {
+      "mode": "implicit-or-explicit",
+      "paths": [
+        "$lvsea-writing",
+        "写作流水线",
+        "最后去 AI 味",
+        "先研究再写"
+      ]
+    },
+    "execution": {
+      "context": "inline",
+      "shell": "bash-or-powershell"
+    },
+    "trust": {
+      "source_tier": "local",
+      "remote_inline_execution": "forbid",
+      "remote_metadata_policy": "allow read-only source review; forbid unreviewed code execution",
+      "generated_public_claims": "evidence-bound"
+    },
+    "permissions": {
+      "network": "only when research is requested or needed for a changing/unknown fact",
+      "file_write": "draft artifacts only when requested",
+      "subprocess": "local checker and package validation only",
+      "interactive": "ask only when a missing fact, reader, format, or author decision changes the result"
+    },
+    "degradation": {
+      "openai": "single-entry routed workflow",
+      "claude": "single-entry routed workflow",
+      "generic": "neutral-source workflow with explicit stage labels",
+      "agent-skills-compatible": "canonical-source workflow",
+      "vscode": "file-backed workflow with manual final gate"
+    }
+  },
+  "evidence_boundary": {
+    "local_validation_is_evidence": true,
+    "trigger_fixture_is_evidence": true,
+    "provider_or_human_output_evidence": false,
+    "missing_external_or_human_evidence_label": "missing evidence",
+    "public_claim_policy": "claim only what named package, trigger, runtime, install, provider, or human evidence supports"
+  }
+}

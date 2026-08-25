@@ -14,6 +14,17 @@
 | [dongbeixiaohuo/writing-agent](https://github.com/dongbeixiaohuo/writing-agent) | `cd411cfbc44f03dc0513b2f5ec3804f13896f5eb` | 长文分阶段、风格建模证据账本、事实核查、版本记录、读者测试、可选导出 | Claude 专属 Subagent 名称、强制每阶段停机、未必适合短稿的重型项目树 |
 | [Hello-SimpleAI/chatgpt-comparison-detection](https://github.com/Hello-SimpleAI/chatgpt-comparison-detection) | `1f8c15c28f87e09a5abfd86ee6e15005dc7d2119` | 中英、单文本/问答/语言学检测的研究背景；检测器作为反馈而非真值 | HC3 数据、模型权重、外部服务调用和数据集衍生内容 |
 
+## 本轮主线升级来源
+
+| 来源 | 固定 revision / 信号 | 本次采用 | 不直接采用 |
+| --- | --- | --- | --- |
+| [zhouluobo X 文章](https://x.com/zhouluobo/status/2091846529321664695) | 文章发表于 2026-08-24；2026-08-25 通过只读镜像接口提取，X 页面本身受访问限制 | 研究、结构、读者、声音、场景和最后 Humanizer 的角色分工；按需求串联而不是强制全装；技术文档的代码/链接/参数验收；人工终审是最后决定 | 不复制文章全文、截图、原作者私人配置或“所有 Skill 都必须安装”的结论 |
+| [CommandCodeAI/agent-skills content-research-writer](https://github.com/CommandCodeAI/agent-skills/tree/main/skills/content-research-writer) | `f490dd9016f2729311e90f317dcb6c98be1a1500`；skills.sh 检索信号 25 installs（2026-08-25） | 研究、提纲、逐段反馈、引用账本和声音保留；改成中文事实账本与按需路由 | 强制问卷、虚构示例数据、把钩子或“准备发布”当成质量证明 |
+| [mblode/ghostwriter](https://github.com/mblode/ghostwriter) | `046f1f05906d911277745f1d665cd07203005038`；skills.sh 检索信号 5 installs（2026-08-25）；MIT | 核心声音 + 场景声音、样本训练/评估分离、盲测思路、私人档案不进公开包 | 外部 CLI、私有目录约定、把盲测结果外推成通用质量结论 |
+| [mblode/agent-skills](https://github.com/mblode/agent-skills) | `e97a3b383f5944f90d41eb92b24b4fb3b917a7f9`；docs-writing skills.sh 检索信号 770 installs（2026-08-25）；MIT | 用 IS/IS NOT 设边界；产品文案先明确行动/读者/结果；技术文档加可运行代码、链接和参数门 | 外部 Ghostwriter 依赖、前端/品牌专用规则和与本仓库无关的工具路由 |
+| [skills.sh content-research-writer 搜索](https://skills.sh/composiohq/awesome-claude-skills/content-research-writer) | 2026-08-25 只用于发现候选；目录安装量不等于质量 | 使用目录作为 prior-art 入口，并保留来源、安装量和实际源文件的区分 | 不把安装量、stars 或搜索排名合并成质量分数，不盲装候选 |
+| 本地 `find-skills`、`lvsea-research`、`lvsea-zao-skill` | 当前环境已安装；`lvsea-zao-skill` 0.1.1 | skills.sh -> GitHub 源码 -> keep/adapt/reject/invent 台账；Intent -> Research -> Synthesis -> Package -> Eval -> Review -> Release；研究证据账本和缺失证据标记 | 不把元 Skill 的创建流程复制成写作规则，不用静态评测冒充模型或人工质量证据 |
+
 ## 共同安全边界
 
 - 任何来源的“分数”都只能描述文本在某个规则或模型下的可疑信号，不能证明作者身份，也不能保证绕过平台检测。

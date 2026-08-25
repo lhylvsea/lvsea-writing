@@ -4,7 +4,7 @@
 
 它不是单纯的“AI 味词典”，也不以规避检测为目标。它更关心一篇文字是否有真实材料、明确判断、具体动作和合适的说话位置，再处理自然表达、节奏与格式。
 
-当前版本：<code>0.2.0</code>
+当前版本：<code>0.3.0</code>
 
 ## 能做什么
 
@@ -12,6 +12,7 @@
 - **检测后改写**：先按意义膨胀、宣传腔、模糊归因、公式句、AI 高频词和风格痕迹出报告，再定点改写。
 - **风格校准**：根据 3–5 篇同一作者样本提取稳定的表达特征，不复制原句，不偷渡样本之外的经历和观点。
 - **深度长文**：按任务契约、证据账本、立场、提纲、初稿、编辑、去痕、事实核查和终稿推进。
+- **写作流水线**：把资料、结构、读者、声音、场景、初稿、最后去 AI 味和人工终审串成一条线；去 AI 味不再抢跑。
 - **统计复查**：输出句长变化、词汇多样性、三元组重复、结构和 Unicode 残留等线索，并明确它们不是作者身份结论。
 - **中文、英文和中英混写**：中文规则优先，英文规则单独路由，避免把英文阈值直接硬套到中文。
 
@@ -24,6 +25,7 @@
 5. 不凭空添加数字、人物动作、心理、对白、经历、来源或产品能力。
 6. 正式报告、技术文档、安全和党政材料优先保证准确、庄重和必要结构。
 7. 统计分数只能帮助复查，不能证明文本由谁写成，也不能保证平台检测结果。
+8. 去 AI 味是最后的编辑层，不能替代研究、主线、风格、专业核验和作者终审。
 
 ## 快速开始
 
@@ -41,6 +43,18 @@ C:\Users\rabbit\.codex\skills\lvsea-writing
 使用 $lvsea-writing，先判断这份材料适合轻量改稿还是深度流程；保留事实和判断，输出自然终稿，并列出仍需核实的地方。
 ~~~
 
+也可以使用 Agent Skills 兼容安装器：
+
+~~~powershell
+npx skills add https://github.com/lhylvsea/lvsea-writing --skill lvsea-writing -g -y
+~~~
+
+你可以这样说：
+
+~~~text
+用 $lvsea-writing 先研究资料、搭主线和提纲，等初稿完成后最后一步再去 AI 味，保留事实，最后把需要我确认的地方列出来。
+~~~
+
 ### 常用调用
 
 ~~~text
@@ -52,6 +66,12 @@ C:\Users\rabbit\.codex\skills\lvsea-writing
 
 用 $lvsea-writing 按深度长文流程，从选题、证据、提纲、初稿、审稿到事实核查逐步推进。
 ~~~
+
+## 推荐主线
+
+资料/证据 -> 主判断/提纲 -> 读者 -> 声音 -> 场景/格式 -> 初稿 -> 最后去 AI 味 -> 人工终审。
+
+短改稿可以合并前几步；研究型长文、教程和正式材料不要跳过资料与结构。完整阶段交接见 [pipeline.md](references/pipeline.md)。
 
 ## 适用场景
 
@@ -79,7 +99,9 @@ python scripts/check_writing.py path\to\draft.md --json
 
 ## 深层参考
 
+- [写作流水线](references/pipeline.md)：把研究、结构、读者、声音、场景、初稿、最后去 AI 味和人工终审串起来。
 - [写作工作流](references/workflow.md)：轻量改稿、深度长文、检测评分和风格学习的路由。
+- [作者人工终审](references/human-final-gate.md)：事实回看、读出声、署名决定和反馈回写。
 - [事实与证据](references/evidence.md)：来源分层、虚构边界和事实核对。
 - [风格建模](references/style-modeling.md)：样本门、表达 DNA、验证短文和盲测。
 - [读者测试](references/reader-test.md)：目标读者、怀疑读者和行动读者检查。
@@ -105,3 +127,31 @@ python -m unittest discover -s tests -v
 ~~~
 
 完整的中文使用说明、限制和四个真实应用场景见 [USAGE.zh-CN.md](USAGE.zh-CN.md)。
+
+## 维护者检查
+
+发布前清单：
+
+- [ ] SKILL.md 只有根入口，且描述包含中文触发词
+- [ ] 资料、结构、声音、场景和最后 Humanizer 的顺序没有被改乱
+- [ ] 触发评测、包校验、单元测试和安装发现均通过
+- [ ] provider/人工证据缺失时已明确标注，不把静态结果写成质量结论
+
+~~~powershell
+$env:PYTHONUTF8='1'
+python scripts/validate_package.py .
+python -m unittest discover -s tests -v
+~~~
+
+本包的治理方法参考 qiaomu-meta-skill、yao-meta-skill 和本地 lvsea-zao-skill；在治理环境中还可以运行对应的 validate_skill.py、trigger_eval.py、Skill IR 和上下文预算检查。由于上游 validate_skill.py 默认校验的是 lvsea-zao-skill，本仓库的可直接运行入口是 validate_package.py。
+
+## Troubleshooting
+
+- Skill 未被发现：确认安装目录下直接存在 SKILL.md，不要只把仓库套在多层目录里。
+- Skill 过早去 AI 味：在调用中明确“先资料、结构和场景，最后一步再去 AI 味”，并要求保留中间产物。
+- 风格不像本人：补充 3–5 篇同作者、同场景样本，先建声音证据，不要只追加禁用词。
+- 事实不稳：停在证据账本，补来源或把主张降级为推断，不要继续抛光句子。
+
+## 重要边界
+
+去 AI 味不是规避检测，也不是凭空伪造真人经历。统计信号不能证明作者身份；没有 provider 或人工盲评时，仓库只声明完成了静态、触发、结构和安装验证。

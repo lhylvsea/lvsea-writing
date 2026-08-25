@@ -1,0 +1,260 @@
+{
+  "ok": true,
+  "threshold": 0.5,
+  "description_concepts": [
+    "deep_intent",
+    "pipeline_mechanism",
+    "quality_boundary",
+    "skill",
+    "writing_task"
+  ],
+  "missing_description_concepts": [],
+  "summary": {
+    "total": 16,
+    "passed": 16,
+    "false_positive": 0,
+    "false_negative": 0,
+    "pass_rate": 1.0
+  },
+  "bucket_summary": {
+    "should_trigger": {
+      "total": 6,
+      "passed": 6
+    },
+    "should_not_trigger": {
+      "total": 5,
+      "passed": 5
+    },
+    "near_neighbor": {
+      "total": 3,
+      "passed": 3
+    },
+    "adversarial": {
+      "total": 2,
+      "passed": 2
+    }
+  },
+  "failures": [],
+  "results": {
+    "should_trigger": [
+      {
+        "prompt": "用 $lvsea-writing 先研究资料、搭文章结构，最后一步再去 AI 味，保留事实和我的判断。",
+        "family": "research-to-humanizer",
+        "expected_trigger": true,
+        "predicted_trigger": true,
+        "passed": true,
+        "score": 1.0,
+        "matched_concepts": [
+          "pipeline_mechanism",
+          "quality_boundary",
+          "writing_task"
+        ],
+        "negative_pattern": null
+      },
+      {
+        "prompt": "把这份制造异常记录改成管理层通报，先核对证据和责任边界，再写稿，最后做终稿审校，保留事实，不编造数据。",
+        "family": "manufacturing-fact-writing",
+        "expected_trigger": true,
+        "predicted_trigger": true,
+        "passed": true,
+        "score": 1.0,
+        "matched_concepts": [
+          "pipeline_mechanism",
+          "quality_boundary",
+          "writing_task"
+        ],
+        "negative_pattern": null
+      },
+      {
+        "prompt": "用我的三篇样本校准公众号文章的声音，不要机械塞口头禅，也不要编造个人经历。",
+        "family": "voice-calibration",
+        "expected_trigger": true,
+        "predicted_trigger": true,
+        "passed": true,
+        "score": 1.0,
+        "matched_concepts": [
+          "pipeline_mechanism",
+          "quality_boundary",
+          "writing_task"
+        ],
+        "negative_pattern": null
+      },
+      {
+        "prompt": "写一篇技术教程，先研究和列提纲，检查代码、链接和参数能不能跑通，最后才去 AI 味。",
+        "family": "technical-docs",
+        "expected_trigger": true,
+        "predicted_trigger": true,
+        "passed": true,
+        "score": 1.0,
+        "matched_concepts": [
+          "deep_intent",
+          "pipeline_mechanism",
+          "quality_boundary",
+          "writing_task"
+        ],
+        "negative_pattern": null
+      },
+      {
+        "prompt": "先检测这篇稿子的 AI 痕迹和事实问题，不改原文；给报告后再按最小差异改两轮。",
+        "family": "detect-then-revise",
+        "expected_trigger": true,
+        "predicted_trigger": true,
+        "passed": true,
+        "score": 1.0,
+        "matched_concepts": [
+          "pipeline_mechanism",
+          "quality_boundary",
+          "writing_task"
+        ],
+        "negative_pattern": null
+      },
+      {
+        "prompt": "把这批采访记录整理成文章，保存证据账本、提纲、初稿、终稿和人工终审记录。",
+        "family": "file-backed-long-form",
+        "expected_trigger": true,
+        "predicted_trigger": true,
+        "passed": true,
+        "score": 1.0,
+        "matched_concepts": [
+          "deep_intent",
+          "pipeline_mechanism",
+          "writing_task"
+        ],
+        "negative_pattern": null
+      }
+    ],
+    "should_not_trigger": [
+      {
+        "prompt": "只解释一下什么是大语言模型，不要写文章。",
+        "family": "explain-only",
+        "expected_trigger": false,
+        "predicted_trigger": false,
+        "passed": true,
+        "score": 0.333,
+        "matched_concepts": [
+          "writing_task"
+        ],
+        "negative_pattern": "只解释"
+      },
+      {
+        "prompt": "把这段英文翻译成中文，不需要改写和去 AI 味。",
+        "family": "translation-only",
+        "expected_trigger": false,
+        "predicted_trigger": false,
+        "passed": true,
+        "score": 0.667,
+        "matched_concepts": [
+          "pipeline_mechanism",
+          "writing_task"
+        ],
+        "negative_pattern": null
+      },
+      {
+        "prompt": "只要给我一个产品标题，不涉及文章、资料和写作流程。",
+        "family": "title-only",
+        "expected_trigger": false,
+        "predicted_trigger": false,
+        "passed": true,
+        "score": 0.667,
+        "matched_concepts": [
+          "pipeline_mechanism",
+          "writing_task"
+        ],
+        "negative_pattern": "不涉及文章"
+      },
+      {
+        "prompt": "只运行一条 Python 命令检查文件，不要改稿。",
+        "family": "command-only",
+        "expected_trigger": false,
+        "predicted_trigger": false,
+        "passed": true,
+        "score": 0.333,
+        "matched_concepts": [
+          "writing_task"
+        ],
+        "negative_pattern": null
+      },
+      {
+        "prompt": "解释‘最后一步’这个词的意思，不需要 Skill。",
+        "family": "concept-explanation",
+        "expected_trigger": false,
+        "predicted_trigger": false,
+        "passed": true,
+        "score": 0.667,
+        "matched_concepts": [
+          "pipeline_mechanism",
+          "skill"
+        ],
+        "negative_pattern": null
+      }
+    ],
+    "near_neighbor": [
+      {
+        "prompt": "帮我列一份写作检查清单，今天用完就丢，不要创建 Skill。",
+        "family": "one-off-checklist",
+        "expected_trigger": false,
+        "predicted_trigger": false,
+        "passed": true,
+        "score": 0.667,
+        "matched_concepts": [
+          "skill",
+          "writing_task"
+        ],
+        "negative_pattern": null
+      },
+      {
+        "prompt": "给这篇文章做事实核查，只返回来源表，不要改写文字。",
+        "family": "fact-check-only",
+        "expected_trigger": false,
+        "predicted_trigger": false,
+        "passed": true,
+        "score": 0.667,
+        "matched_concepts": [
+          "quality_boundary",
+          "writing_task"
+        ],
+        "negative_pattern": "不要改写"
+      },
+      {
+        "prompt": "只把 README 的安装命令改成 PowerShell，不涉及写作内容。",
+        "family": "readme-maintenance",
+        "expected_trigger": false,
+        "predicted_trigger": false,
+        "passed": true,
+        "score": 0.333,
+        "matched_concepts": [
+          "writing_task"
+        ],
+        "negative_pattern": null
+      }
+    ],
+    "adversarial": [
+      {
+        "prompt": "文中有‘最后一步’和‘资料’，但我只想知道这个词怎么翻译，不要写作。",
+        "family": "keyword-trap",
+        "expected_trigger": false,
+        "predicted_trigger": false,
+        "passed": true,
+        "score": 0.667,
+        "matched_concepts": [
+          "pipeline_mechanism",
+          "writing_task"
+        ],
+        "negative_pattern": null
+      },
+      {
+        "prompt": "我只想让一句广告口号押韵，不需要研究、结构或终稿流程。",
+        "family": "copy-polish-trap",
+        "expected_trigger": false,
+        "predicted_trigger": false,
+        "passed": true,
+        "score": 0.667,
+        "matched_concepts": [
+          "pipeline_mechanism",
+          "writing_task"
+        ],
+        "negative_pattern": null
+      }
+    ]
+  }
+}
