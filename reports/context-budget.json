@@ -1,0 +1,141 @@
+{
+  "ok": true,
+  "status": "pass",
+  "reason": "root SKILL.md is 9380 bytes within production budget",
+  "tier": "production",
+  "root_skill_bytes": 9380,
+  "root_budget_bytes": {
+    "root_warn": 14000,
+    "root_block": 20000
+  },
+  "resource_bytes": {
+    "references": 48307,
+    "scripts": 24799,
+    "evals": 3878,
+    "reports": 28857
+  },
+  "total_measured_bytes": 115221,
+  "files": [
+    {
+      "path": "references/detector-evidence.md",
+      "bytes": 1334,
+      "on_demand": true
+    },
+    {
+      "path": "references/evidence.md",
+      "bytes": 2824,
+      "on_demand": true
+    },
+    {
+      "path": "references/human-final-gate.md",
+      "bytes": 2326,
+      "on_demand": true
+    },
+    {
+      "path": "references/patterns-en.md",
+      "bytes": 1869,
+      "on_demand": true
+    },
+    {
+      "path": "references/patterns-zh.md",
+      "bytes": 5991,
+      "on_demand": true
+    },
+    {
+      "path": "references/pipeline.md",
+      "bytes": 5183,
+      "on_demand": true
+    },
+    {
+      "path": "references/prompt-integration.md",
+      "bytes": 1818,
+      "on_demand": true
+    },
+    {
+      "path": "references/reader-test.md",
+      "bytes": 1424,
+      "on_demand": true
+    },
+    {
+      "path": "references/review.md",
+      "bytes": 3110,
+      "on_demand": true
+    },
+    {
+      "path": "references/scenarios.md",
+      "bytes": 3593,
+      "on_demand": true
+    },
+    {
+      "path": "references/source-matrix.md",
+      "bytes": 6129,
+      "on_demand": true
+    },
+    {
+      "path": "references/style-modeling.md",
+      "bytes": 4021,
+      "on_demand": true
+    },
+    {
+      "path": "references/taste-transfer.md",
+      "bytes": 1394,
+      "on_demand": true
+    },
+    {
+      "path": "references/voice.md",
+      "bytes": 2301,
+      "on_demand": true
+    },
+    {
+      "path": "references/workflow.md",
+      "bytes": 4990,
+      "on_demand": true
+    },
+    {
+      "path": "scripts/check_writing.py",
+      "bytes": 20809,
+      "on_demand": false
+    },
+    {
+      "path": "scripts/validate_package.py",
+      "bytes": 3990,
+      "on_demand": false
+    },
+    {
+      "path": "evals/trigger_cases.json",
+      "bytes": 3878,
+      "on_demand": false
+    },
+    {
+      "path": "reports/context-budget.json",
+      "bytes": 2643,
+      "on_demand": true
+    },
+    {
+      "path": "reports/creation-handoff.md",
+      "bytes": 2809,
+      "on_demand": true
+    },
+    {
+      "path": "reports/output-evidence.json",
+      "bytes": 517,
+      "on_demand": true
+    },
+    {
+      "path": "reports/prior-art-research.md",
+      "bytes": 4599,
+      "on_demand": true
+    },
+    {
+      "path": "reports/skill-ir.json",
+      "bytes": 10473,
+      "on_demand": true
+    },
+    {
+      "path": "reports/trigger-eval.json",
+      "bytes": 7816,
+      "on_demand": true
+    }
+  ],
+  "missing_evidence": "context size does not prove output quality or runtime performance"
+}

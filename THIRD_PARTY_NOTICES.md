@@ -100,6 +100,44 @@ examples, checker implementations, data, or model weights.
   statistical signal and an authorship claim. No HC3 data, model weights,
   training code or external detector service is included.
 
+### CommandCodeAI/agent-skills
+
+- Repository: https://github.com/CommandCodeAI/agent-skills
+- Reviewed revision: `f490dd9016f2729311e90f317dcb6c98be1a1500`
+- License: MIT
+- Adapted ideas: research -> outline -> section feedback, citation tracking and
+  voice preservation. The external repository and its generated examples are
+  not copied.
+
+### mblode/ghostwriter
+
+- Repository: https://github.com/mblode/ghostwriter
+- Reviewed revision: `046f1f05906d911277745f1d665cd07203005038`
+- License: MIT
+- Adapted ideas: a cross-context core voice plus scene-specific voice files,
+  separated training/evaluation, and blind-comparison thinking. Private profile
+  contents and the external CLI are not included.
+
+### mblode/agent-skills
+
+- Repository: https://github.com/mblode/agent-skills
+- Reviewed revision: `e97a3b383f5944f90d41eb92b24b4fb3b917a7f9`
+- License: MIT
+- Adapted ideas: explicit IS/IS NOT boundaries, brief-first product copy, and
+  runnable/link/parameter gates for technical documentation. Unrelated frontend
+  and platform-specific routing is not included.
+
+### zhouluobo X article
+
+- Source: https://x.com/zhouluobo/status/2091846529321664695
+- Reviewed: 2026-08-25; the X page itself was access-limited, so the article
+  content was read through a read-only mirror API and checked against the
+  linked article metadata.
+- Adapted ideas: role separation, research and structure before style, Humanizer
+  as the last editing stage, and author/human judgment as the final gate.
+- Boundary: no article text, screenshots, private configuration or original
+  prompt bundle is copied into this repository.
+
 ## Adaptation boundary
 
 The rules in this repository are newly organized and rewritten for a

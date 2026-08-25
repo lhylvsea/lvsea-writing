@@ -1,0 +1,51 @@
+{
+  "name": "lvsea-writing",
+  "version": "0.3.0",
+  "owner": "海洋哥 / lhylvsea",
+  "updated_at": "2026-08-25",
+  "review_due": "2026-11-25",
+  "status": "active",
+  "maturity_tier": "governed",
+  "lifecycle_stage": "library",
+  "context_budget_tier": "production",
+  "review_cadence": "quarterly",
+  "upstream_inspiration": "https://github.com/joeseesun/qiaomu-meta-skill; https://github.com/yaojingang/yao-meta-skill; https://x.com/zhouluobo/status/2091846529321664695",
+  "upstream_sync": {
+    "qiaomu_reviewed_commit": "9d9eafe",
+    "yao_reviewed_commit": "f5d8f68",
+    "article_reviewed_at": "2026-08-25",
+    "policy": "semantic adoption; do not mirror upstream wholesale"
+  },
+  "intent": {
+    "job_to_be_done": "把资料、研究、结构、读者、声音、场景、成稿、最后去 AI 味和人工终审串成一条可复用的中文写作流水线。",
+    "target_users": ["个人写作者", "制造企业管理者", "内容与文档作者", "Agent/Skill 使用者"],
+    "inputs": ["source_material", "brief", "draft", "writing_samples", "reader_constraints", "format_requirements"],
+    "outputs": ["brief", "evidence_ledger", "thesis_outline", "reader_test", "voice_profile", "draft", "humanizer_review", "final_gate"],
+    "exclusions": ["AI detector evasion", "fabricated experience", "unsupported claims", "one-size-fits-all tone", "forced slang or typos"]
+  },
+  "risk": {
+    "output_risk": "medium",
+    "execution_risk": "low",
+    "trust_boundary": "user-material-and-provider"
+  },
+  "permissions": {
+    "network": "read-only research when allowed by the user; cite sources and mark missing evidence",
+    "file_write": "write only requested draft artifacts or the local writing project",
+    "subprocess": "optional local checker and validation scripts",
+    "secrets": "never read private profiles or credentials into public artifacts"
+  },
+  "target_platforms": ["openai", "claude", "generic", "agent-skills-compatible", "vscode"],
+  "factory_components": ["references", "scripts", "evals", "reports", "schemas"],
+  "release_gates": [
+    "brief_and_output_contract",
+    "research_structure_style_route",
+    "humanizer_is_final_editing_stage",
+    "trigger_regression",
+    "context_budget",
+    "skill_ir",
+    "secret_scan",
+    "source_and_fact_boundary",
+    "local_install_discovery",
+    "missing_provider_or_human_evidence_is_labeled"
+  ]
+}
