@@ -5,7 +5,7 @@
 - skill / version / owner: lvsea-writing / 0.3.0 / 海洋哥 / lhylvsea
 - one-line job: 把资料、结构、读者、声音、场景、初稿、最后去 AI 味和人工终审串成单入口写作流水线。
 - local path: outputs/lvsea-writing
-- publication status: pending local gates and public repository update
+- publication status: published to main through PR #1; GitHub release v0.3.0
 
 ## Reference skills studied
 
@@ -34,8 +34,9 @@
 
 ## Verification and limits
 
-- package: manifest/interface/root entrypoint added; local links and JSON/YAML to be checked.
-- trigger: evals/trigger_cases.json is designed for sequencing and false-positive coverage.
+- package: validate_package.py PASS; manifest/interface/root entrypoint and local links checked.
+- trigger: 16/16 cases pass across should-trigger, should-not-trigger, near-neighbor and adversarial buckets.
 - runtime: the standard-library checker remains the only deterministic text checker.
+- install: Test-SkillInstall PASS; direct local discovery and validation command both passed.
 - provider/human output: missing evidence; no provider A/B or blind human study is claimed here.
 - deliberately excluded: remote inline execution, detector APIs, model weights, private voice corpus and automatic external publication beyond the requested repository.
