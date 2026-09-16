@@ -5,7 +5,7 @@
 - skill / version / owner: lvsea-writing / 0.4.0 / 海洋哥 / lhylvsea
 - one-line job: 以 `lvsea-writing` 为唯一入口，按需路由小红书素材专家和终稿后处理专家，串起资料、结构、读者、声音、场景、初稿、最后去 AI 味和人工终审。
 - local path: outputs/lvsea-writing
-- publication status: published to main through PR #1; GitHub release v0.3.0
+- publication status: published to main through [PR #3](https://github.com/lhylvsea/lvsea-writing/pull/3); [GitHub release v0.4.0](https://github.com/lhylvsea/lvsea-writing/releases/tag/v0.4.0)
 
 ## Reference skills studied
 
@@ -37,8 +37,8 @@
 ## Verification and limits
 
 - package: validate_package.py PASS; manifest/interface/root entrypoint and local links checked.
-- trigger: 16/16 cases pass across should-trigger, should-not-trigger, near-neighbor and adversarial buckets.
+- trigger: 19/19 cases pass across should-trigger, should-not-trigger, near-neighbor and adversarial buckets.
 - runtime: the standard-library checker remains the only deterministic text checker.
-- install: Test-SkillInstall PASS; direct local discovery and validation command both passed.
+- install: `Test-SkillInstall.ps1` PASS for `lvsea-writing`; direct local discovery and `validate_package.py` both passed. The companion `lvsea-xiezuo` install gate also passed separately.
 - provider/human output: missing evidence; no provider A/B or blind human study is claimed here.
 - deliberately excluded: remote inline execution, detector APIs, model weights, private voice corpus and automatic external publication beyond the requested repository.
