@@ -13,6 +13,7 @@
 | [leonxlnx/taste-skill](https://github.com/leonxlnx/taste-skill) | `e988add20dab0fa97d7a76781c48961c8184288e` | 先读 brief、反默认、识别受众、不要用一个模板解决所有任务 | 前端栈、视觉 dials、CSS/动效和页面 pre-flight |
 | [dongbeixiaohuo/writing-agent](https://github.com/dongbeixiaohuo/writing-agent) | `cd411cfbc44f03dc0513b2f5ec3804f13896f5eb` | 长文分阶段、风格建模证据账本、事实核查、版本记录、读者测试、可选导出 | Claude 专属 Subagent 名称、强制每阶段停机、未必适合短稿的重型项目树 |
 | [Hello-SimpleAI/chatgpt-comparison-detection](https://github.com/Hello-SimpleAI/chatgpt-comparison-detection) | `1f8c15c28f87e09a5abfd86ee6e15005dc7d2119` | 中英、单文本/问答/语言学检测的研究背景；检测器作为反馈而非真值 | HC3 数据、模型权重、外部服务调用和数据集衍生内容 |
+| [larashero3-dotcom/lieflat-less-ai-tone](https://github.com/larashero3-dotcom/lieflat-less-ai-tone) | `27d29232f10124db904ca9c0536d0b67cb3b2833`；MIT | 白名单式最后编辑、信息守恒、结构不动、命中样本审计、排除不稳健特征 | 整套上游 Skill、语料、脚本、统计阈值和独立入口触发 |
 
 ## 本轮主线升级来源
 
@@ -24,6 +25,14 @@
 | [mblode/agent-skills](https://github.com/mblode/agent-skills) | `e97a3b383f5944f90d41eb92b24b4fb3b917a7f9`；docs-writing skills.sh 检索信号 770 installs（2026-08-25）；MIT | 用 IS/IS NOT 设边界；产品文案先明确行动/读者/结果；技术文档加可运行代码、链接和参数门 | 外部 Ghostwriter 依赖、前端/品牌专用规则和与本仓库无关的工具路由 |
 | [skills.sh content-research-writer 搜索](https://skills.sh/composiohq/awesome-claude-skills/content-research-writer) | 2026-08-25 只用于发现候选；目录安装量不等于质量 | 使用目录作为 prior-art 入口，并保留来源、安装量和实际源文件的区分 | 不把安装量、stars 或搜索排名合并成质量分数，不盲装候选 |
 | 本地 `find-skills`、`lvsea-research`、`lvsea-zao-skill` | 当前环境已安装；`lvsea-zao-skill` 0.1.1 | skills.sh -> GitHub 源码 -> keep/adapt/reject/invent 台账；Intent -> Research -> Synthesis -> Package -> Eval -> Review -> Release；研究证据账本和缺失证据标记 | 不把元 Skill 的创建流程复制成写作规则，不用静态评测冒充模型或人工质量证据 |
+
+## 本地专家关系
+
+| 专家 | 在 `lvsea-writing` 中的角色 | 入口策略 |
+| --- | --- | --- |
+| [lhylvsea/lvsea-xiezuo](https://github.com/lhylvsea/lvsea-xiezuo) | 小红书素材和证据前置专家 | 由单入口按素材意图调用；也支持用户显式调用做素材研究 |
+| `lvsea-writing` | 唯一用户侧主入口和通用写作主流程 | 默认调用入口 |
+| `lieflat-less-ai-tone` | 完整成稿后的严格后处理专家 | 只在最后阶段调用；缺失时走严格降级合同 |
 
 ## 共同安全边界
 

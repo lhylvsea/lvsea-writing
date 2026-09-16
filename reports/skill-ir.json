@@ -1,16 +1,16 @@
 {
   "schema_version": "3.0.0-lvsea",
-  "generated_at": "2026-08-25",
+  "generated_at": "2026-09-16",
   "package": {
     "name": "lvsea-writing",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "owner": "海洋哥 / lhylvsea",
     "maturity_tier": "governed",
     "lifecycle_stage": "library",
-    "upstream_inspiration": "https://github.com/joeseesun/qiaomu-meta-skill; https://github.com/yaojingang/yao-meta-skill; https://x.com/zhouluobo/status/2091846529321664695"
+    "upstream_inspiration": "https://github.com/joeseesun/qiaomu-meta-skill; https://github.com/yaojingang/yao-meta-skill; https://x.com/zhouluobo/status/2091846529321664695; https://github.com/lhylvsea/lvsea-xiezuo; https://github.com/larashero3-dotcom/lieflat-less-ai-tone"
   },
   "intent": {
-    "description": "中文优先、事实敏感的写作 Skill 与分阶段流水线。用于写作、改稿、公众号、知乎、行业解读、制造管理、安全党政材料、技术教程、产品文案、PPT 文案和视频口播；把资料研究、证据、主线结构、读者、作者风格、场景格式、初稿、终稿和人工终审串起来，最后一步才做去 AI 味。用户说先研究再写、先搭结构、学我的样本、去 AI 味但保留事实、先检测后改、逐步写长文或需要证据账本时使用。不要把它用于规避检测、编造经历或替代专业最终判断。",
+    "description": "中文优先、事实敏感的单入口写作与路由 Skill。用于写作、改稿、研究型长文、制造管理、安全党政材料、技术教程、产品文案、PPT 文案和视频口播；先按任务识别是否需要小红书素材专家 $lvsea-xiezuo，再按资料、结构、读者、作者声音和场景推进，完整成稿后才调用 $lieflat-less-ai-tone 或严格后处理模式做最后去 AI 味。用户说先研究再写、先搭结构、学我的样本、去 AI 味但保留事实、先检测后改、逐步写长文或需要证据账本时使用。不要把它用于规避检测、编造经历或替代专业最终判断。",
     "job_to_be_done": "把资料、研究、结构、读者、声音、场景、成稿、最后去 AI 味和人工终审串成一条可复用的中文写作流水线。",
     "target_users": [
       "个人写作者",
@@ -27,6 +27,7 @@
       "format_requirements"
     ],
     "outputs": [
+      "route_decision",
       "brief",
       "evidence_ledger",
       "thesis_outline",
@@ -41,7 +42,8 @@
       "fabricated experience",
       "unsupported claims",
       "one-size-fits-all tone",
-      "forced slang or typos"
+      "forced slang or typos",
+      "loading every specialist for every task"
     ]
   },
   "triggers": {
@@ -51,14 +53,17 @@
       "用我的三篇样本校准公众号文章的声音，不要机械塞口头禅，也不要编造个人经历。",
       "写一篇技术教程，先研究和列提纲，检查代码、链接和参数能不能跑通，最后才去 AI 味。",
       "先检测这篇稿子的 AI 痕迹和事实问题，不改原文；给报告后再按最小差异改两轮。",
-      "把这批采访记录整理成文章，保存证据账本、提纲、初稿、终稿和人工终审记录。"
+      "把这批采访记录整理成文章，保存证据账本、提纲、初稿、终稿和人工终审记录。",
+      "从小红书素材和互动指标开始，先生成证据卡和二创简报，再写成完整文章，最后一步严格去 AI 味。",
+      "这是一篇完整成稿，只在最后调用严格白名单规则清理 AI 痕迹，不能改结构和事实。"
     ],
     "should_not_trigger": [
       "只解释一下什么是大语言模型，不要写文章。",
       "把这段英文翻译成中文，不需要改写和去 AI 味。",
       "只要给我一个产品标题，不涉及文章、资料和写作流程。",
       "只运行一条 Python 命令检查文件，不要改稿。",
-      "解释‘最后一步’这个词的意思，不需要 Skill。"
+      "解释‘最后一步’这个词的意思，不需要 Skill。",
+      "只解释小红书是什么，不需要素材研究、写作或 Skill 路由。"
     ],
     "near_neighbor": [
       "帮我列一份写作检查清单，今天用完就丢，不要创建 Skill。",
@@ -78,7 +83,7 @@
       "观点和长文先锁定一个可检验的主判断，再搭信息推进的结构；没有主线时先停在提纲，不用排比和小标题掩盖空洞。",
       "用户要求“像我”时，先建立样本证据和场景声音；没有足够样本就标低置信度，不默认套温暖、口语或网络腔。",
       "技术文档、产品文案、制造管理、政策党政、视频和 PPT 使用各自的读者与格式约束，不把公众号写法通用化。",
-      "只有完成事实、结构、读者、声音和场景编辑后，才读取中文/英文模式并做 Humanizer 最终审校。",
+      "只有完成事实、结构、读者、声音和场景编辑后，才进入 [最后编辑适配说明](references/late-humanizer-adapter.md)，优先调用 `$lieflat-less-ai-tone`；未安装时使用严格后处理降级模式。",
       "最后一关必须检查：哪些句子是用户真正会说的，哪些事实仍需核验，哪些变化只是模型自我感觉。必要时把决定交回作者。"
     ],
     "core_workflow": [],
@@ -97,7 +102,8 @@
       "去 AI 味不能覆盖事实准确、政策/安全/法律/医疗/金融边界、正式文种、技术正确性、平台格式或用户明确保留的表达。",
       "私人样本、声音档案、内部材料和凭据不写入公开仓库；公开发布的 Skill 只含抽象规则和匿名示例。",
       "没有真实模型 provider 或人工盲评时，只报告静态、脚本和结构验证，标记 missing evidence，不宣称写作质量已经被证明。",
-      "不一次性加载全部参考文件；只读取当前任务命中的模块，避免“超级 Skill”变成上下文堆积。"
+      "不一次性加载全部参考文件；只读取当前任务命中的模块，避免“超级 Skill”变成上下文堆积。",
+      "不因任务中同时出现素材、写作和 AI 味就自动调用全部专家；每次只进入当前阶段需要的下游。"
     ]
   },
   "resources": {
@@ -105,6 +111,7 @@
       "references/detector-evidence.md",
       "references/evidence.md",
       "references/human-final-gate.md",
+      "references/late-humanizer-adapter.md",
       "references/patterns-en.md",
       "references/patterns-zh.md",
       "references/pipeline.md",
@@ -113,6 +120,7 @@
       "references/review.md",
       "references/scenarios.md",
       "references/source-matrix.md",
+      "references/specialist-routing.md",
       "references/style-modeling.md",
       "references/taste-transfer.md",
       "references/voice.md",
@@ -151,7 +159,7 @@
     "maturity": "governed",
     "lifecycle_stage": "library",
     "review_cadence": "quarterly",
-    "review_due": "2026-11-25",
+    "review_due": "2026-12-16",
     "rollback_boundary": "feature branch and immutable semver release; local sync is recoverable"
   },
   "portability": {

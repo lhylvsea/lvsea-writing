@@ -3,10 +3,10 @@
   "description_required_concepts": ["skill", "writing_task", "pipeline_mechanism"],
   "positive_concepts": {
     "skill": ["skill", "writing skill", "技能", "能力"],
-    "writing_task": ["写作", "改稿", "文章", "稿子", "稿", "教程", "文案", "公众号", "口播", "写一篇", "重写", "写", "writing", "材料", "通报", "改成", "整理"],
-    "pipeline_mechanism": ["资料", "研究", "证据", "结构", "提纲", "读者", "风格", "声音", "场景", "初稿", "终稿", "去 ai 味", "去ai味", "人工终审", "流水线", "先研究再写", "最后一步", "检测", "报告", "审校"],
-    "quality_boundary": ["保留事实", "不编造", "事实核查", "引用", "链接", "代码能运行", "不要先去 ai 味", "不改原文", "样本"],
-    "deep_intent": ["逐步", "深度", "中间产物", "证据账本", "版本", "串起来", "跑通"]
+    "writing_task": ["写作", "改稿", "文章", "稿子", "稿", "教程", "文案", "公众号", "口播", "写一篇", "重写", "写", "writing", "材料", "小红书", "素材", "通报", "改成", "整理"],
+    "pipeline_mechanism": ["资料", "研究", "证据", "证据卡", "结构", "提纲", "读者", "风格", "声音", "场景", "初稿", "终稿", "完整成稿", "二创简报", "去 ai 味", "去ai味", "人工终审", "流水线", "先研究再写", "最后一步", "检测", "报告", "审校"],
+    "quality_boundary": ["保留事实", "不编造", "事实核查", "引用", "链接", "代码能运行", "不要先去 ai 味", "不改原文", "白名单", "结构和事实", "样本"],
+    "deep_intent": ["逐步", "深度", "中间产物", "证据账本", "版本", "串起来", "跑通", "素材", "证据卡"]
   },
   "negative_patterns": [
     "只解释",
@@ -25,14 +25,17 @@
     {"text": "用我的三篇样本校准公众号文章的声音，不要机械塞口头禅，也不要编造个人经历。", "family": "voice-calibration", "min_concept_matches": 3},
     {"text": "写一篇技术教程，先研究和列提纲，检查代码、链接和参数能不能跑通，最后才去 AI 味。", "family": "technical-docs", "min_concept_matches": 3},
     {"text": "先检测这篇稿子的 AI 痕迹和事实问题，不改原文；给报告后再按最小差异改两轮。", "family": "detect-then-revise", "min_concept_matches": 3},
-    {"text": "把这批采访记录整理成文章，保存证据账本、提纲、初稿、终稿和人工终审记录。", "family": "file-backed-long-form", "min_concept_matches": 3}
+    {"text": "把这批采访记录整理成文章，保存证据账本、提纲、初稿、终稿和人工终审记录。", "family": "file-backed-long-form", "min_concept_matches": 3},
+    {"text": "从小红书素材和互动指标开始，先生成证据卡和二创简报，再写成完整文章，最后一步严格去 AI 味。", "family": "specialist-chain", "min_concept_matches": 3},
+    {"text": "这是一篇完整成稿，只在最后调用严格白名单规则清理 AI 痕迹，不能改结构和事实。", "family": "late-specialist", "min_concept_matches": 3}
   ],
   "should_not_trigger": [
     {"text": "只解释一下什么是大语言模型，不要写文章。", "family": "explain-only", "min_concept_matches": 3},
     {"text": "把这段英文翻译成中文，不需要改写和去 AI 味。", "family": "translation-only", "min_concept_matches": 3},
     {"text": "只要给我一个产品标题，不涉及文章、资料和写作流程。", "family": "title-only", "min_concept_matches": 3},
     {"text": "只运行一条 Python 命令检查文件，不要改稿。", "family": "command-only", "min_concept_matches": 3},
-    {"text": "解释‘最后一步’这个词的意思，不需要 Skill。", "family": "concept-explanation", "min_concept_matches": 3}
+    {"text": "解释‘最后一步’这个词的意思，不需要 Skill。", "family": "concept-explanation", "min_concept_matches": 3},
+    {"text": "只解释小红书是什么，不需要素材研究、写作或 Skill 路由。", "family": "xhs-explanation-only", "min_concept_matches": 3}
   ],
   "near_neighbor": [
     {"text": "帮我列一份写作检查清单，今天用完就丢，不要创建 Skill。", "family": "one-off-checklist", "min_concept_matches": 3},

@@ -138,6 +138,26 @@ examples, checker implementations, data, or model weights.
 - Boundary: no article text, screenshots, private configuration or original
   prompt bundle is copied into this repository.
 
+### larashero3-dotcom/lieflat-less-ai-tone
+
+- Repository: https://github.com/larashero3-dotcom/lieflat-less-ai-tone
+- Reviewed revision: `27d29232f10124db904ca9c0536d0b67cb3b2833`
+- License: MIT
+- Adapted ideas: whitelist-only late editing, information conservation,
+  structure preservation, explicit non-rules and sample auditing before trusting
+  a pattern.
+- Boundary: the repository remains the authoritative specialist; this package
+  does not copy its complete SKILL.md, corpus, scripts or model-specific
+  statistics. The specialist is invoked only after a complete draft.
+
+### lhylvsea/lvsea-xiezuo companion Skill
+
+- Repository: https://github.com/lhylvsea/lvsea-xiezuo
+- Role: optional local companion for Xiaohongshu material evidence and
+  source-backed writing handoff.
+- Boundary: it is not a third-party dependency or a second general writing
+  entry. `$lvsea-writing` remains the primary user-facing route.
+
 ## Adaptation boundary
 
 The rules in this repository are newly organized and rewritten for a

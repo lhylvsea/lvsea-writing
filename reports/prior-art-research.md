@@ -25,6 +25,19 @@ read through a read-only mirror API and checked against its metadata. This is
 source-retrieval evidence, not independent evidence that the article's workflow
 improves every writing task.
 
+## Incremental specialist routing decision
+
+On 2026-09-16, the local reviewed source of [lieflat-less-ai-tone](https://github.com/larashero3-dotcom/lieflat-less-ai-tone) was checked at commit `27d29232f10124db904ca9c0536d0b67cb3b2833`. Its design is intentionally narrower than `lvsea-writing`: it accepts a complete draft, applies only explicit whitelist rules, preserves structure and information, and leaves semantic style judgments to the author. The repository reports a 629-article comparison corpus and 11 retained signals, but also documents model variation, denominator errors and rejected features; those numbers are not imported as universal thresholds.
+
+The current [lvsea-xiezuo](https://github.com/lhylvsea/lvsea-xiezuo) package is a platform-specific material radar with a source-backed handoff. It is useful before prose, but it should not become a second general writing entry or own the final Humanizer stage.
+
+| Decision | Result |
+| --- | --- |
+| `keep` | one user-facing `$lvsea-writing` entry; xiezuo for Xiaohongshu evidence; lieflat for complete-draft final editing |
+| `adapt` | explicit route table, specialist availability fallback, handoff fields and route regression cases |
+| `reject` | a fourth mega-Skill that pastes all three prompts, automatic loading of every specialist, and broad anti-AI rules before structure exists |
+| `invent` | `references/specialist-routing.md` and `references/late-humanizer-adapter.md` as the stable orchestration contract |
+
 ## Discovery signals
 
 | Candidate | Discovery signal | Source review | Decision |

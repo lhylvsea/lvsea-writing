@@ -1,12 +1,13 @@
 interface:
   display_name: "Lvsea Writing Boss"
-  short_description: "中文事实写作流水线：资料、结构、读者、风格、场景、成稿，最后才做去 AI 味和人工终审"
-  default_prompt: "使用 $lvsea-writing，先锁定写作契约；按资料、结构、读者、风格、场景和成稿逐层推进，最后才做去 AI 味，并保留事实核查与人工终审门。"
+  short_description: "单入口中文事实写作路由：按需调用素材专家，完成研究、结构、成稿，最后才做严格去 AI 味和人工终审"
+  default_prompt: "使用 $lvsea-writing 作为唯一入口，先判断是小红书素材研究、普通写作还是完整成稿后处理；需要素材雷达时调用 $lvsea-xiezuo，需要最后白名单式去 AI 味时调用 $lieflat-less-ai-tone，其他阶段由本 Skill 完成。不要同时加载全部专家，最后保留事实核查与人工终审门。"
   examples:
     - "用 $lvsea-writing 把这批资料先整理成证据账本和文章主线，再逐段写稿，最后才去 AI 味。"
     - "用 $lvsea-writing 学我的样本和场景语气，不要先套人味提示词，也不要编造经历。"
     - "用 $lvsea-writing 写一篇技术教程，研究、结构、代码和链接核验后，再做最后审校。"
     - "先用 $lvsea-writing 检测，不改原文；给出问题、证据边界和最小修改方案。"
+    - "从小红书素材开始写一篇文章：先走素材证据和二创简报，再完成正文，最后严格去 AI 味。"
 compatibility:
   canonical_format: "agent-skills"
   adapter_targets:
