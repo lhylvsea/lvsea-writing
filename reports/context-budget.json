@@ -1,24 +1,24 @@
 {
   "ok": true,
   "status": "pass",
-  "reason": "root SKILL.md is 9380 bytes within production budget",
+  "reason": "root SKILL.md is 10849 bytes within production budget",
   "tier": "production",
-  "root_skill_bytes": 9380,
+  "root_skill_bytes": 10849,
   "root_budget_bytes": {
     "root_warn": 14000,
     "root_block": 20000
   },
   "resource_bytes": {
-    "references": 48307,
-    "scripts": 24799,
-    "evals": 3878,
-    "reports": 28857
+    "references": 54483,
+    "scripts": 25541,
+    "evals": 4590,
+    "reports": 33847
   },
-  "total_measured_bytes": 115221,
+  "total_measured_bytes": 129310,
   "files": [
     {
       "path": "references/detector-evidence.md",
-      "bytes": 1334,
+      "bytes": 1349,
       "on_demand": true
     },
     {
@@ -28,7 +28,12 @@
     },
     {
       "path": "references/human-final-gate.md",
-      "bytes": 2326,
+      "bytes": 2362,
+      "on_demand": true
+    },
+    {
+      "path": "references/late-humanizer-adapter.md",
+      "bytes": 2089,
       "on_demand": true
     },
     {
@@ -38,12 +43,12 @@
     },
     {
       "path": "references/patterns-zh.md",
-      "bytes": 5991,
+      "bytes": 6065,
       "on_demand": true
     },
     {
       "path": "references/pipeline.md",
-      "bytes": 5183,
+      "bytes": 5291,
       "on_demand": true
     },
     {
@@ -63,17 +68,22 @@
     },
     {
       "path": "references/scenarios.md",
-      "bytes": 3593,
+      "bytes": 3653,
       "on_demand": true
     },
     {
       "path": "references/source-matrix.md",
-      "bytes": 6129,
+      "bytes": 7007,
+      "on_demand": true
+    },
+    {
+      "path": "references/specialist-routing.md",
+      "bytes": 2768,
       "on_demand": true
     },
     {
       "path": "references/style-modeling.md",
-      "bytes": 4021,
+      "bytes": 4091,
       "on_demand": true
     },
     {
@@ -88,52 +98,52 @@
     },
     {
       "path": "references/workflow.md",
-      "bytes": 4990,
+      "bytes": 5068,
       "on_demand": true
     },
     {
       "path": "scripts/check_writing.py",
-      "bytes": 20809,
+      "bytes": 21439,
       "on_demand": false
     },
     {
       "path": "scripts/validate_package.py",
-      "bytes": 3990,
+      "bytes": 4102,
       "on_demand": false
     },
     {
       "path": "evals/trigger_cases.json",
-      "bytes": 3878,
+      "bytes": 4590,
       "on_demand": false
     },
     {
       "path": "reports/context-budget.json",
-      "bytes": 2643,
+      "bytes": 3071,
       "on_demand": true
     },
     {
       "path": "reports/creation-handoff.md",
-      "bytes": 2809,
+      "bytes": 3394,
       "on_demand": true
     },
     {
       "path": "reports/output-evidence.json",
-      "bytes": 517,
+      "bytes": 527,
       "on_demand": true
     },
     {
       "path": "reports/prior-art-research.md",
-      "bytes": 4599,
+      "bytes": 6168,
       "on_demand": true
     },
     {
       "path": "reports/skill-ir.json",
-      "bytes": 10473,
+      "bytes": 11424,
       "on_demand": true
     },
     {
       "path": "reports/trigger-eval.json",
-      "bytes": 7816,
+      "bytes": 9263,
       "on_demand": true
     }
   ],

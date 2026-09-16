@@ -1,10 +1,10 @@
 # lvsea-writing
 
-一个中文优先、事实敏感、可分层调用的写作与审校 Skill。
+一个中文优先、事实敏感的单入口写作与路由 Skill。
 
 它不是单纯的“AI 味词典”，也不以规避检测为目标。它更关心一篇文字是否有真实材料、明确判断、具体动作和合适的说话位置，再处理自然表达、节奏与格式。
 
-当前版本：<code>0.3.0</code>
+当前版本：<code>0.4.0</code>
 
 ## 能做什么
 
@@ -15,6 +15,19 @@
 - **写作流水线**：把资料、结构、读者、声音、场景、初稿、最后去 AI 味和人工终审串成一条线；去 AI 味不再抢跑。
 - **统计复查**：输出句长变化、词汇多样性、三元组重复、结构和 Unicode 残留等线索，并明确它们不是作者身份结论。
 - **中文、英文和中英混写**：中文规则优先，英文规则单独路由，避免把英文阈值直接硬套到中文。
+
+## 单入口使用
+
+日常只调用 `$lvsea-writing`，不需要先判断三个 Skill 谁负责。它会按任务阶段选择下游专家：
+
+| 你要做的事 | 内部路线 |
+| --- | --- |
+| 普通写作、改稿、长文、教程、制造管理、政策、PPT、口播 | `$lvsea-writing` 主流程 |
+| 小红书素材、互动指标、评论区、飞书素材库 | `$lvsea-xiezuo` -> 写作接力包 -> `$lvsea-writing` |
+| 已有完整成稿，只做最后去 AI 味 | `$lieflat-less-ai-tone`；未安装时使用严格后处理降级模式 |
+| 从小红书素材写成完整文章并交付终稿 | `$lvsea-xiezuo` -> `$lvsea-writing` -> `$lieflat-less-ai-tone` -> 人工终审 |
+
+不要把三套规则一次性叠加。素材专家不负责通用成稿，终稿专家不负责研究和结构，`lvsea-writing` 才是用户侧的总入口。详细判定和降级规则见 [references/specialist-routing.md](references/specialist-routing.md)。
 
 ## 核心原则
 
@@ -49,6 +62,8 @@ C:\Users\rabbit\.codex\skills\lvsea-writing
 npx skills add https://github.com/lhylvsea/lvsea-writing --skill lvsea-writing -g -y
 ~~~
 
+`lvsea-xiezuo` 和 `lieflat-less-ai-tone` 是可选下游专家。只有确实要做小红书素材雷达或使用其严格终稿规则时才安装，不影响主入口的普通写作流程。
+
 你可以这样说：
 
 ~~~text
@@ -65,6 +80,7 @@ npx skills add https://github.com/lhylvsea/lvsea-writing --skill lvsea-writing -
 用 $lvsea-writing 学我的写作样本，但不要把我的口头禅机械塞进每一段。
 
 用 $lvsea-writing 按深度长文流程，从选题、证据、提纲、初稿、审稿到事实核查逐步推进。
+只调用 `$lvsea-writing`：从小红书素材筛选、证据卡和二创简报开始，写成文章，最后一步再做严格去 AI 味。
 ~~~
 
 ## 推荐主线
@@ -109,6 +125,8 @@ python scripts/check_writing.py path\to\draft.md --json
 - [英文 AI 痕迹规则](references/patterns-en.md)：英文结构模式和误判防护。
 - [检测信号边界](references/detector-evidence.md)：统计指标、检测器和作者判断的边界。
 - [新增来源取舍矩阵](references/source-matrix.md)：整合来源、固定 revision 和排除项。
+- [单入口专家路由](references/specialist-routing.md)：三个 Skill 的职责、顺序、交接和降级。
+- [最后编辑适配说明](references/late-humanizer-adapter.md)：`lieflat-less-ai-tone` 的白名单式终稿边界。
 
 ## 来源与许可证
 
@@ -149,6 +167,7 @@ python -m unittest discover -s tests -v
 
 - Skill 未被发现：确认安装目录下直接存在 SKILL.md，不要只把仓库套在多层目录里。
 - Skill 过早去 AI 味：在调用中明确“先资料、结构和场景，最后一步再去 AI 味”，并要求保留中间产物。
+- 不知道该用哪个 Skill：只调用 `$lvsea-writing`；出现小红书素材指标时让它路由到 `lvsea-xiezuo`，已有完整成稿时才进入 `lieflat-less-ai-tone`。
 - 风格不像本人：补充 3–5 篇同作者、同场景样本，先建声音证据，不要只追加禁用词。
 - 事实不稳：停在证据账本，补来源或把主张降级为推断，不要继续抛光句子。
 
