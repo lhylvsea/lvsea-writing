@@ -5,7 +5,7 @@
 - skill / version / owner: lvsea-writing / 0.5.0 / 海洋哥 / lhylvsea
 - one-line job: 以 `lvsea-writing` 为唯一入口，按需路由小红书素材专家和终稿后处理专家，串起资料、结构、读者、声音、场景、完整初稿后复查、最后去 AI 味和人工终审。
 - local path: outputs/lvsea-writing
-- publication status: PR #5 merged into `main` at `671863f`; GitHub release `v0.5.0` pending tag creation
+- publication status: PR #5 and the release-evidence PR #6 merged into `main`; GitHub release [`v0.5.0`](https://github.com/lhylvsea/lvsea-writing/releases/tag/v0.5.0) published at `00d1211`.
 
 ## Reference skills studied
 
