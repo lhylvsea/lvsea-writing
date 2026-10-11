@@ -177,6 +177,55 @@ LATIN_WORD_PATTERN = re.compile(r"[A-Za-z]+(?:'[A-Za-z]+)?")
 METRIC_TOKEN_PATTERN = re.compile(r"[\u4e00-\u9fff]|[A-Za-z]+(?:'[A-Za-z]+)?|\d+(?:\.\d+)?")
 SUSPICIOUS_CODEPOINTS = {0x00AD, 0x200B, 0x200C, 0x200D, 0x2060, 0xFEFF}
 
+# This is an editorial triage signal, not an authorship score. The weights
+# deliberately reward independent pattern families and cap repeated hits so a
+# long document cannot be condemned by one noisy rule.
+REVIEW_CATEGORY_WEIGHTS = {
+    "机器残留": 22,
+    "套话": 12,
+    "推理脚手架": 8,
+    "占位符": 5,
+    "隐藏字符": 6,
+    "翻案句": 5,
+    "路标词": 4,
+    "模糊归因": 4,
+    "空转句式": 4,
+    "公式化钩子": 4,
+    "拟人化归因": 3,
+    "语境词": 2,
+    "重复度信号": 6,
+    "词汇多样性信号": 6,
+    "句长节奏": 4,
+    "短段鼓点": 3,
+    "重复开头": 3,
+    "连词密度": 2,
+    "标点痕迹": 2,
+    "格式痕迹": 1,
+}
+
+REVIEW_CATEGORY_FAMILIES = {
+    "机器残留": "artifact",
+    "推理脚手架": "artifact",
+    "占位符": "artifact",
+    "隐藏字符": "artifact",
+    "套话": "rhetoric",
+    "翻案句": "rhetoric",
+    "路标词": "rhetoric",
+    "模糊归因": "rhetoric",
+    "空转句式": "rhetoric",
+    "公式化钩子": "rhetoric",
+    "拟人化归因": "rhetoric",
+    "语境词": "rhetoric",
+    "重复度信号": "rhythm",
+    "词汇多样性信号": "rhythm",
+    "句长节奏": "rhythm",
+    "短段鼓点": "rhythm",
+    "重复开头": "rhythm",
+    "连词密度": "rhythm",
+    "标点痕迹": "rhythm",
+    "格式痕迹": "format",
+}
+
 
 @dataclass
 class Finding:
@@ -192,7 +241,7 @@ class ScanResult:
     scenario: str
     failures: list[Finding]
     warnings: list[Finding]
-    metrics: dict[str, int | float | None]
+    metrics: dict[str, object]
 
     @property
     def exit_code(self) -> int:
@@ -362,6 +411,65 @@ def add_term_findings(
 ) -> None:
     for position, term in term_matches(text, terms):
         findings.append(Finding(category, line_number(text, position), f"{message}：{term}", excerpt(text[position : position + 80])))
+
+
+def review_band(score: int) -> str:
+    if score <= 20:
+        return "clean"
+    if score <= 40:
+        return "light_tells"
+    if score <= 60:
+        return "mixed"
+    if score <= 80:
+        return "heavy_tells"
+    return "pervasive_tells"
+
+
+def review_signal(
+    failures: list[Finding],
+    warnings: list[Finding],
+    metrics: dict[str, object],
+) -> dict[str, object]:
+    """Build a bounded editorial triage signal from independent findings."""
+
+    counts = collections.Counter(item.category for item in (*failures, *warnings))
+    families = {REVIEW_CATEGORY_FAMILIES[category] for category in counts if category in REVIEW_CATEGORY_FAMILIES}
+    weighted = 0
+    scored_categories: dict[str, int] = {}
+    for category, count in counts.items():
+        weight = REVIEW_CATEGORY_WEIGHTS.get(category, 0)
+        if not weight:
+            continue
+        contribution = min(count, 3) * weight
+        weighted += contribution
+        scored_categories[category] = contribution
+
+    # A second independent family is useful evidence, but no single rule can
+    # dominate the signal. The absolute bands are routing labels, not model or
+    # platform thresholds and not comparable to another checker.
+    score = min(100, int(round(weighted + max(0, len(families) - 1) * 2)))
+    content_units = int(metrics.get("content_units") or 0)
+    if content_units < 40:
+        confidence = "none"
+        confidence_reason = "正文过短，分数只作提示，不足以分流重写"
+    elif content_units < 120:
+        confidence = "low"
+        confidence_reason = "正文较短，单个句式可能明显影响分数"
+    elif content_units < 300:
+        confidence = "usable"
+        confidence_reason = "可用于定点复查，仍需结合体裁和语境"
+    else:
+        confidence = "solid"
+        confidence_reason = "篇幅和独立信号较充足，可用于选择复查深度"
+
+    return {
+        "review_score": score,
+        "review_band": review_band(score),
+        "review_confidence": confidence,
+        "review_confidence_reason": confidence_reason,
+        "review_pattern_families": sorted(families),
+        "review_scored_categories": dict(sorted(scored_categories.items())),
+    }
 
 
 def scan_text(text: str, scenario: str = "general", texture: bool = False) -> ScanResult:
@@ -573,6 +681,7 @@ def scan_text(text: str, scenario: str = "general", texture: bool = False) -> Sc
                 )
             )
 
+    metrics.update(review_signal(failures, warnings, metrics))
     return ScanResult(total_han, scenario, failures, warnings, metrics)
 
 
@@ -591,6 +700,12 @@ def print_report(result: ScanResult, as_json: bool) -> None:
     print(f"内容单元：{result.metrics['content_units']}；句子：{result.metrics['sentence_count']}；段落：{result.metrics['paragraph_count']}")
     print(f"场景：{result.scenario}")
     print(f"必须修改：{len(result.failures)} 项；需要人工判断：{len(result.warnings)} 项")
+    print(
+        f"编辑复查信号：{result.metrics['review_score']}/100；"
+        f"分段：{result.metrics['review_band']}；"
+        f"置信度：{result.metrics['review_confidence']}"
+    )
+    print("说明：这是定点复查的分流信号，不是作者身份、来源或平台判定。")
     if result.failures:
         print("\n需要修改")
         for item in result.failures:

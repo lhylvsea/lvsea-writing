@@ -15,6 +15,8 @@
 | [Hello-SimpleAI/chatgpt-comparison-detection](https://github.com/Hello-SimpleAI/chatgpt-comparison-detection) | `1f8c15c28f87e09a5abfd86ee6e15005dc7d2119` | 中英、单文本/问答/语言学检测的研究背景；检测器作为反馈而非真值 | HC3 数据、模型权重、外部服务调用和数据集衍生内容 |
 | [larashero3-dotcom/lieflat-less-ai-tone](https://github.com/larashero3-dotcom/lieflat-less-ai-tone) | `27d29232f10124db904ca9c0536d0b67cb3b2833`；MIT | 白名单式最后编辑、信息守恒、结构不动、命中样本审计、排除不稳健特征 | 整套上游 Skill、语料、脚本、统计阈值和独立入口触发 |
 
+| [seyedehsanhadi/sloptrim](https://github.com/seyedehsanhadi/sloptrim) | `38dbb7cb4e97de0b9bf157903c95bdcab016dda2`；v0.9.4；Apache-2.0 | 完整成稿后检测、模式族分流、复查分段与置信度、关键信息保留、两轮反查、代码/格式保护 | Claude 专属钩子、英文词表与阈值、富文档重建、自动覆盖、外部检测服务和规避检测承诺 |
+
 ## 本轮主线升级来源
 
 | 来源 | 固定 revision / 信号 | 本次采用 | 不直接采用 |

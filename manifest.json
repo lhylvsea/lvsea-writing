@@ -1,15 +1,15 @@
 {
   "name": "lvsea-writing",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "owner": "海洋哥 / lhylvsea",
-  "updated_at": "2026-09-16",
-  "review_due": "2026-12-16",
+  "updated_at": "2026-10-11",
+  "review_due": "2027-01-11",
   "status": "active",
   "maturity_tier": "governed",
   "lifecycle_stage": "library",
   "context_budget_tier": "production",
   "review_cadence": "quarterly",
-  "upstream_inspiration": "https://github.com/joeseesun/qiaomu-meta-skill; https://github.com/yaojingang/yao-meta-skill; https://x.com/zhouluobo/status/2091846529321664695; https://github.com/lhylvsea/lvsea-xiezuo; https://github.com/larashero3-dotcom/lieflat-less-ai-tone",
+  "upstream_inspiration": "https://github.com/joeseesun/qiaomu-meta-skill; https://github.com/yaojingang/yao-meta-skill; https://x.com/zhouluobo/status/2091846529321664695; https://github.com/lhylvsea/lvsea-xiezuo; https://github.com/larashero3-dotcom/lieflat-less-ai-tone; https://github.com/seyedehsanhadi/sloptrim",
   "upstream_sync": {
     "qiaomu_reviewed_commit": "9d9eafe",
     "yao_reviewed_commit": "f5d8f68",
@@ -21,13 +21,15 @@
     "material_specialist": "https://github.com/lhylvsea/lvsea-xiezuo",
     "late_humanizer_specialist": "https://github.com/larashero3-dotcom/lieflat-less-ai-tone",
     "late_humanizer_reviewed_commit": "27d29232f10124db904ca9c0536d0b67cb3b2833",
+    "sloptrim_reviewed_commit": "38dbb7cb4e97de0b9bf157903c95bdcab016dda2",
+    "sloptrim_reviewed_version": "0.9.4",
     "policy": "route by stage; do not load or run all specialists by default"
   },
   "intent": {
-    "job_to_be_done": "把资料、研究、结构、读者、声音、场景、成稿、最后去 AI 味和人工终审串成一条可复用的中文写作流水线。",
+    "job_to_be_done": "把资料、研究、结构、读者、声音、场景、成稿、初稿后复查、最后去 AI 味和人工终审串成一条可复用的中文写作流水线。",
     "target_users": ["个人写作者", "制造企业管理者", "内容与文档作者", "Agent/Skill 使用者"],
     "inputs": ["source_material", "brief", "draft", "writing_samples", "reader_constraints", "format_requirements"],
-    "outputs": ["route_decision", "brief", "evidence_ledger", "thesis_outline", "reader_test", "voice_profile", "draft", "humanizer_review", "final_gate"],
+    "outputs": ["route_decision", "brief", "evidence_ledger", "thesis_outline", "reader_test", "voice_profile", "draft", "review_report", "humanizer_review", "final_gate"],
     "exclusions": ["AI detector evasion", "fabricated experience", "unsupported claims", "one-size-fits-all tone", "forced slang or typos", "loading every specialist for every task"]
   },
   "risk": {
@@ -52,6 +54,7 @@
     "context_budget",
     "skill_ir",
     "secret_scan",
+    "deterministic_review_signal",
     "source_and_fact_boundary",
     "local_install_discovery",
     "missing_provider_or_human_evidence_is_labeled"

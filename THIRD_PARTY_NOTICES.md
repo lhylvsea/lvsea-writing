@@ -150,6 +150,20 @@ examples, checker implementations, data, or model weights.
   does not copy its complete SKILL.md, corpus, scripts or model-specific
   statistics. The specialist is invoked only after a complete draft.
 
+### seyedehsanhadi/sloptrim
+
+- Repository: https://github.com/seyedehsanhadi/sloptrim
+- Reviewed revision: `38dbb7cb4e97de0b9bf157903c95bdcab016dda2` (`v0.9.4`)
+- License: Apache-2.0
+- Adapted ideas: complete-draft-first detection, pattern-family triage, score
+  bands as editorial routing, confidence labels, critical-content preservation,
+  two-loop anti-sterility review, format/code protection and deterministic
+  character-layer warnings.
+- Boundary: no upstream code, English pattern catalogue, hook, runtime,
+  benchmark, detector service or model artifact is copied into this package.
+  The local implementation is the existing Chinese-first checker with a
+  bounded `review_score`; it is not an authorship classifier.
+
 ### lhylvsea/lvsea-xiezuo companion Skill
 
 - Repository: https://github.com/lhylvsea/lvsea-xiezuo

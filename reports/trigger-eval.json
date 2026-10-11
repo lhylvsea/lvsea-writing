@@ -10,20 +10,20 @@
   ],
   "missing_description_concepts": [],
   "summary": {
-    "total": 19,
-    "passed": 19,
+    "total": 22,
+    "passed": 22,
     "false_positive": 0,
     "false_negative": 0,
     "pass_rate": 1.0
   },
   "bucket_summary": {
     "should_trigger": {
-      "total": 8,
-      "passed": 8
+      "total": 10,
+      "passed": 10
     },
     "should_not_trigger": {
-      "total": 6,
-      "passed": 6
+      "total": 7,
+      "passed": 7
     },
     "near_neighbor": {
       "total": 3,
@@ -97,6 +97,34 @@
       {
         "prompt": "先检测这篇稿子的 AI 痕迹和事实问题，不改原文；给报告后再按最小差异改两轮。",
         "family": "detect-then-revise",
+        "expected_trigger": true,
+        "predicted_trigger": true,
+        "passed": true,
+        "score": 1.0,
+        "matched_concepts": [
+          "pipeline_mechanism",
+          "quality_boundary",
+          "writing_task"
+        ],
+        "negative_pattern": null
+      },
+      {
+        "prompt": "完整初稿写完后，先用本地检查器做复查分段和置信度判断，再按命中模式最小修改，保留数字、引语和占位符，最后做人工终审。",
+        "family": "sloptrim-inspired-triage",
+        "expected_trigger": true,
+        "predicted_trigger": true,
+        "passed": true,
+        "score": 1.0,
+        "matched_concepts": [
+          "pipeline_mechanism",
+          "quality_boundary",
+          "writing_task"
+        ],
+        "negative_pattern": null
+      },
+      {
+        "prompt": "检查 Markdown 稿件的 AI 痕迹，代码块和引用不要改；先给 review_score 报告，再决定是否重写。",
+        "family": "protected-content-review",
         "expected_trigger": true,
         "predicted_trigger": true,
         "passed": true,
@@ -229,6 +257,18 @@
           "writing_task"
         ],
         "negative_pattern": "只解释"
+      },
+      {
+        "prompt": "只给这段文字一个 AI 分数，不要改写，也不要做写作流程。",
+        "family": "score-only",
+        "expected_trigger": false,
+        "predicted_trigger": false,
+        "passed": true,
+        "score": 0.333,
+        "matched_concepts": [
+          "writing_task"
+        ],
+        "negative_pattern": "不要改写"
       }
     ],
     "near_neighbor": [

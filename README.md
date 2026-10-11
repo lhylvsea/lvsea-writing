@@ -4,7 +4,7 @@
 
 它不是单纯的“AI 味词典”，也不以规避检测为目标。它更关心一篇文字是否有真实材料、明确判断、具体动作和合适的说话位置，再处理自然表达、节奏与格式。
 
-当前版本：<code>0.4.0</code>
+当前版本：<code>0.5.0</code>
 
 ## 能做什么
 
@@ -14,6 +14,7 @@
 - **深度长文**：按任务契约、证据账本、立场、提纲、初稿、编辑、去痕、事实核查和终稿推进。
 - **写作流水线**：把资料、结构、读者、声音、场景、初稿、最后去 AI 味和人工终审串成一条线；去 AI 味不再抢跑。
 - **统计复查**：输出句长变化、词汇多样性、三元组重复、结构和 Unicode 残留等线索，并明确它们不是作者身份结论。
+- **复查分流**：完整初稿后输出可解释的 `review_score`、分段和置信度，帮助决定只标记、定点修改还是回看结构；不把分数当作检测器裁判。
 - **中文、英文和中英混写**：中文规则优先，英文规则单独路由，避免把英文阈值直接硬套到中文。
 
 ## 单入口使用
@@ -24,6 +25,7 @@
 | --- | --- |
 | 普通写作、改稿、长文、教程、制造管理、政策、PPT、口播 | `$lvsea-writing` 主流程 |
 | 小红书素材、互动指标、评论区、飞书素材库 | `$lvsea-xiezuo` -> 写作接力包 -> `$lvsea-writing` |
+| 完整初稿后要求检测、分段或报告 | `$lvsea-writing` 本地复查 -> 定点修改 -> 最后编辑 -> 人工终审 |
 | 已有完整成稿，只做最后去 AI 味 | `$lieflat-less-ai-tone`；未安装时使用严格后处理降级模式 |
 | 从小红书素材写成完整文章并交付终稿 | `$lvsea-xiezuo` -> `$lvsea-writing` -> `$lieflat-less-ai-tone` -> 人工终审 |
 
@@ -81,6 +83,7 @@ npx skills add https://github.com/lhylvsea/lvsea-writing --skill lvsea-writing -
 
 用 $lvsea-writing 按深度长文流程，从选题、证据、提纲、初稿、审稿到事实核查逐步推进。
 只调用 `$lvsea-writing`：从小红书素材筛选、证据卡和二创简报开始，写成文章，最后一步再做严格去 AI 味。
+完整初稿已经写完：先用本地复查分段找高置信问题，再按最小差异修改，最后做 Humanizer 适配和作者终审。
 ~~~
 
 ## 推荐主线
@@ -113,6 +116,8 @@ python scripts/check_writing.py path\to\draft.md --json
 
 高置信复制残留和助手式框架会返回失败；语境词、句式、统计指标、占位符、隐藏字符和格式问题会作为人工复查提醒。脚本通过不代表事实已经核实，出现提醒也不代表某个词在当前语境一定错误。
 
+JSON 报告中的 `review_score`（0–100）、`review_band` 和 `review_confidence` 只用于编辑分流。短文、引文、代码、列表、正式材料和高度专业化文本的统计置信度会降低；分数不能证明作者身份、写作来源或平台结果。完整的取舍和保真门见 [Sloptrim 适配说明](references/sloptrim-adapter.md)。
+
 ## 深层参考
 
 - [写作流水线](references/pipeline.md)：把研究、结构、读者、声音、场景、初稿、最后去 AI 味和人工终审串起来。
@@ -127,10 +132,11 @@ python scripts/check_writing.py path\to\draft.md --json
 - [新增来源取舍矩阵](references/source-matrix.md)：整合来源、固定 revision 和排除项。
 - [单入口专家路由](references/specialist-routing.md)：三个 Skill 的职责、顺序、交接和降级。
 - [最后编辑适配说明](references/late-humanizer-adapter.md)：`lieflat-less-ai-tone` 的白名单式终稿边界。
+- [Sloptrim 适配说明](references/sloptrim-adapter.md)：检测后分流、保真门、格式边界和取舍记录。
 
 ## 来源与许可证
 
-本项目为独立整理和改写，不复制上游 Skill 的完整文件、示例、检查器实现、数据集或模型权重。详细 revision、许可证和取舍记录见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 与 [source-matrix.md](references/source-matrix.md)。
+本项目为独立整理和改写，不复制上游 Skill 的完整文件、示例、检查器实现、数据集或模型权重。详细 revision、许可证和取舍记录见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 与 [source-matrix.md](references/source-matrix.md)。本轮参考了 Apache-2.0 的 `sloptrim` v0.9.4，但没有把它的代码、钩子或英文词表打包进本仓库。
 
 项目代码以 MIT License 发布，见 [LICENSE](LICENSE)。
 

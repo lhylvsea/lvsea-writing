@@ -39,6 +39,23 @@ class CheckWritingTests(unittest.TestCase):
         self.assertIn("repeated_trigram_ratio", result.metrics)
         self.assertGreater(result.metrics["token_count"], 0)
 
+    def test_review_signal_is_bounded_and_not_authorship_verdict(self):
+        result = scan_text("好的，下面是修改后的版本。很好的问题。", scenario="general")
+        self.assertIn(result.metrics["review_band"], {"clean", "light_tells", "mixed", "heavy_tells", "pervasive_tells"})
+        self.assertGreaterEqual(result.metrics["review_score"], 0)
+        self.assertLessEqual(result.metrics["review_score"], 100)
+        self.assertEqual(result.metrics["review_confidence"], "none")
+
+    def test_clean_text_has_clean_review_signal(self):
+        text = (
+            "本周二号线停机 18 分钟，原因是冷却水泵保护动作。维修人员先确认电气回路，"
+            "随后更换接触器并复测。生产损失已经按当班记录登记，产品质量未发现异常。"
+            "下一步由设备组在周五前完成同型号泵的点检，生产组负责复核备用件数量。"
+        )
+        result = scan_text(text, scenario="professional")
+        self.assertEqual(result.metrics["review_score"], 0)
+        self.assertEqual(result.metrics["review_band"], "clean")
+
     def test_placeholder_and_reasoning_scaffolding_are_warnings(self):
         result = scan_text("TODO: INSERT SOURCE。Breaking this down, we need to start by checking it.")
         categories = {item.category for item in result.warnings}
