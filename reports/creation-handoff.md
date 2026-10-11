@@ -2,10 +2,10 @@
 
 ## Result
 
-- skill / version / owner: lvsea-writing / 0.4.0 / 海洋哥 / lhylvsea
-- one-line job: 以 `lvsea-writing` 为唯一入口，按需路由小红书素材专家和终稿后处理专家，串起资料、结构、读者、声音、场景、初稿、最后去 AI 味和人工终审。
+- skill / version / owner: lvsea-writing / 0.5.0 / 海洋哥 / lhylvsea
+- one-line job: 以 `lvsea-writing` 为唯一入口，按需路由小红书素材专家和终稿后处理专家，串起资料、结构、读者、声音、场景、完整初稿后复查、最后去 AI 味和人工终审。
 - local path: outputs/lvsea-writing
-- publication status: published to main through [PR #3](https://github.com/lhylvsea/lvsea-writing/pull/3); [GitHub release v0.4.0](https://github.com/lhylvsea/lvsea-writing/releases/tag/v0.4.0)
+- publication status: feature branch `upgrade/sloptrim-adapter`; public release pending final gates
 
 ## Reference skills studied
 
@@ -18,13 +18,14 @@
 - local lvsea-zao-skill: governed lifecycle, progressive disclosure, evals and evidence-bound release.
 - `larashero3-dotcom/lieflat-less-ai-tone`: late-stage whitelist editing and information conservation; reviewed as a downstream specialist rather than copied wholesale.
 - `lhylvsea/lvsea-xiezuo`: Xiaohongshu material radar and source-backed handoff; treated as an optional upstream specialist, not a second writing entry.
+- `seyedehsanhadi/sloptrim` v0.9.4 at `38dbb7cb4e97de0b9bf157903c95bdcab016dda2`: complete-draft-first review, pattern-family triage, confidence labels and critical-content preservation; adapted semantically, without copying its code or hooks.
 
 ## Absorbed and rejected
 
 - keep: evidence before prose; thesis before polish; reader test; scene-aware voice; technical checks; final Humanizer; author gate.
 - adapt: external multi-skill roles become one routed entry; private voice files become user-controlled local profiles; English pattern lists become Chinese-first context review.
 - reject: forced all-in-one prompt, external runtime dependencies, detector-evasion promises, absolute anti-style rules, private sample publication.
-- invent: pipeline stage contracts, late-Humanizer invariant, final-gate feedback classes, single-entry specialist routing and sequencing trigger regression.
+- invent: pipeline stage contracts, late-Humanizer invariant, final-gate feedback classes, single-entry specialist routing, sequencing trigger regression and the Chinese-first `review_score` triage layer.
 
 ## Advantages and evidence
 
@@ -37,8 +38,8 @@
 ## Verification and limits
 
 - package: validate_package.py PASS; manifest/interface/root entrypoint and local links checked.
-- trigger: 19/19 cases pass across should-trigger, should-not-trigger, near-neighbor and adversarial buckets.
-- runtime: the standard-library checker remains the only deterministic text checker.
-- install: `Test-SkillInstall.ps1` PASS for `lvsea-writing`; direct local discovery and `validate_package.py` both passed. The companion `lvsea-xiezuo` install gate also passed separately.
+- trigger: 22/22 cases pass across should-trigger, should-not-trigger, near-neighbor and adversarial buckets.
+- runtime: the standard-library checker remains the only deterministic text checker; it now returns bounded `review_score`, `review_band` and `review_confidence` fields.
+- install: the previous v0.4.0 local install gate passed; v0.5.0 requires a fresh clean-install gate after publication.
 - provider/human output: missing evidence; no provider A/B or blind human study is claimed here.
 - deliberately excluded: remote inline execution, detector APIs, model weights, private voice corpus and automatic external publication beyond the requested repository.

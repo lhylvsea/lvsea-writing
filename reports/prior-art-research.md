@@ -8,6 +8,19 @@
 - Discovery path: local find-skills instructions -> skills.sh leaderboard/search -> read-only GitHub source review
 - Method reference: local lvsea-zao-skill 0.1.1, using Intent -> Research -> Synthesis -> Package -> Eval -> Review -> Release
 
+## 2026-10-11 incremental review: sloptrim
+
+The requested source was reviewed read-only at [seyedehsanhadi/sloptrim](https://github.com/seyedehsanhadi/sloptrim), tag `v0.9.4`, commit `38dbb7cb4e97de0b9bf157903c95bdcab016dda2`, under Apache-2.0. The source describes a local, deterministic prose-pattern linter with pattern-family scoring, confidence notes, code/format protection, critical-content preservation and a two-loop rewrite cap. Its ethics boundary explicitly rejects authorship claims and detector-evasion use.
+
+| Decision | Result |
+| --- | --- |
+| `keep` | complete-draft-first ordering, pattern-family triage, bounded score bands, short-text confidence warning, preservation of numbers/names/attribution/hedges/placeholders, character-layer review and anti-sterility recheck |
+| `adapt` | use the existing Chinese-first `check_writing.py`; expose `review_score`, `review_band`, `review_confidence` and scored categories; use the signal only to choose editorial depth |
+| `reject` | Claude-specific hooks and commands, automatic file rewriting, English vocabulary thresholds as Chinese rules, rich-document rebuild, external detector calls and silent-output requirements that hide a requested report |
+| `invent` | a single-entry route that places local review between complete drafting and the final Humanizer, with a separate author gate and explicit format boundary |
+
+The upstream detector was not executed as a dependency and its code was not copied. The local score is intentionally not comparable to `sloptrim`'s `ai_tell_score`; both remain review heuristics rather than authorship evidence.
+
 ## Article findings
 
 The referenced article divides writing into research, structure, reader collaboration,
