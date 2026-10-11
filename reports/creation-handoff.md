@@ -5,7 +5,7 @@
 - skill / version / owner: lvsea-writing / 0.5.0 / 海洋哥 / lhylvsea
 - one-line job: 以 `lvsea-writing` 为唯一入口，按需路由小红书素材专家和终稿后处理专家，串起资料、结构、读者、声音、场景、完整初稿后复查、最后去 AI 味和人工终审。
 - local path: outputs/lvsea-writing
-- publication status: feature branch `upgrade/sloptrim-adapter`; public release pending final gates
+- publication status: PR #5 merged into `main` at `671863f`; GitHub release `v0.5.0` pending tag creation
 
 ## Reference skills studied
 
@@ -40,6 +40,6 @@
 - package: validate_package.py PASS; manifest/interface/root entrypoint and local links checked.
 - trigger: 22/22 cases pass across should-trigger, should-not-trigger, near-neighbor and adversarial buckets.
 - runtime: the standard-library checker remains the only deterministic text checker; it now returns bounded `review_score`, `review_band` and `review_confidence` fields.
-- install: the previous v0.4.0 local install gate passed; v0.5.0 requires a fresh clean-install gate after publication.
+- install: `Test-SkillInstall.ps1` PASS for v0.5.0 in both `C:\Users\rabbit\.codex\skills\lvsea-writing` and `C:\Users\rabbit\.agents\skills\lvsea-writing`; source-file SHA-256 comparison has no missing or mismatched files; v0.4.0 trees were backed up before synchronization.
 - provider/human output: missing evidence; no provider A/B or blind human study is claimed here.
 - deliberately excluded: remote inline execution, detector APIs, model weights, private voice corpus and automatic external publication beyond the requested repository.
