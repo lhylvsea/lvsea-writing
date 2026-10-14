@@ -164,6 +164,19 @@ examples, checker implementations, data, or model weights.
   The local implementation is the existing Chinese-first checker with a
   bounded `review_score`; it is not an authorship classifier.
 
+### docwriter-org/plain-writing-skill
+
+- Repository: https://github.com/docwriter-org/plain-writing-skill
+- Reviewed revision: `f0d3630983ac7a82aa580f1c1509d72df739ee12` (2026-10-14)
+- License: MIT
+- Adapted ideas: plain words, defined necessary jargon, explicit subjects and
+  actions, consistent terms, conclusion-first structure, removal of empty
+  emphasis, rhetorical-question stacks and fake agency, plus the `deslopify`
+  command contract and optional revision view.
+- Boundary: no upstream Skill file, eval dataset, history, output table or
+  evaluation claim is copied. Plain mode is an optional clarity layer and does
+  not override Chinese genre, professional terminology, author voice or format.
+
 ### lhylvsea/lvsea-xiezuo companion Skill
 
 - Repository: https://github.com/lhylvsea/lvsea-xiezuo

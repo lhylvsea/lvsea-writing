@@ -17,6 +17,8 @@ REQUIRED_FILES = (
     "manifest.json",
     "agents/interface.yaml",
     "evals/trigger_cases.json",
+    "references/plain-writing-adapter.md",
+    "examples/05-plain-deslopify.md",
     "reports/skill-ir.json",
     "reports/trigger-eval.json",
     "reports/prior-art-research.md",
@@ -68,6 +70,9 @@ def validate(root: Path) -> dict:
             failures.append("manifest name does not match lvsea-writing")
         if not re.fullmatch(r"\d+\.\d+\.\d+", str(manifest.get("version", ""))):
             failures.append("manifest version is not semantic")
+        version_path = root / "VERSION"
+        if version_path.is_file() and version_path.read_text(encoding="utf-8").strip() != str(manifest.get("version")):
+            failures.append("VERSION does not match manifest version")
         if manifest.get("maturity_tier") == "governed":
             for field in ("review_due", "review_cadence", "release_gates"):
                 if not manifest.get(field):

@@ -1,20 +1,20 @@
 {
   "ok": true,
   "status": "pass",
-  "reason": "root SKILL.md is 12424 bytes within production budget",
+  "reason": "root SKILL.md is 13997 bytes within production budget",
   "tier": "production",
-  "root_skill_bytes": 12424,
+  "root_skill_bytes": 13997,
   "root_budget_bytes": {
     "root_warn": 14000,
     "root_block": 20000
   },
   "resource_bytes": {
-    "references": 61380,
-    "scripts": 29606,
-    "evals": 5331,
-    "reports": 38999
+    "references": 67050,
+    "scripts": 29923,
+    "evals": 6142,
+    "reports": 44409
   },
-  "total_measured_bytes": 147740,
+  "total_measured_bytes": 161521,
   "files": [
     {
       "path": "references/detector-evidence.md",
@@ -52,6 +52,11 @@
       "on_demand": true
     },
     {
+      "path": "references/plain-writing-adapter.md",
+      "bytes": 5088,
+      "on_demand": true
+    },
+    {
       "path": "references/prompt-integration.md",
       "bytes": 1818,
       "on_demand": true
@@ -63,7 +68,7 @@
     },
     {
       "path": "references/review.md",
-      "bytes": 3478,
+      "bytes": 3526,
       "on_demand": true
     },
     {
@@ -73,12 +78,12 @@
     },
     {
       "path": "references/sloptrim-adapter.md",
-      "bytes": 4395,
+      "bytes": 4455,
       "on_demand": true
     },
     {
       "path": "references/source-matrix.md",
-      "bytes": 7410,
+      "bytes": 7884,
       "on_demand": true
     },
     {
@@ -113,22 +118,22 @@
     },
     {
       "path": "scripts/validate_package.py",
-      "bytes": 4102,
+      "bytes": 4419,
       "on_demand": false
     },
     {
       "path": "evals/trigger_cases.json",
-      "bytes": 5331,
+      "bytes": 6142,
       "on_demand": false
     },
     {
       "path": "reports/context-budget.json",
-      "bytes": 3415,
+      "bytes": 3538,
       "on_demand": true
     },
     {
       "path": "reports/creation-handoff.md",
-      "bytes": 3841,
+      "bytes": 4377,
       "on_demand": true
     },
     {
@@ -138,17 +143,17 @@
     },
     {
       "path": "reports/prior-art-research.md",
-      "bytes": 7812,
+      "bytes": 9651,
       "on_demand": true
     },
     {
       "path": "reports/skill-ir.json",
-      "bytes": 12704,
+      "bytes": 14081,
       "on_demand": true
     },
     {
       "path": "reports/trigger-eval.json",
-      "bytes": 10700,
+      "bytes": 12235,
       "on_demand": true
     }
   ],
