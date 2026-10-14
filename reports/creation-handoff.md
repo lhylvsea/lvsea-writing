@@ -5,7 +5,7 @@
 - skill / version / owner: lvsea-writing / 0.6.0 / 海洋哥 / lhylvsea
 - one-line job: 以 `lvsea-writing` 为唯一入口，按需路由小红书素材专家和终稿后处理专家，串起资料、结构、读者、声音、场景、完整初稿后复查、最后去 AI 味和人工终审。
 - local path: outputs/lvsea-writing
-- publication status: feature branch `upgrade/plain-writing-adapter`; public release pending validation and publication
+- publication status: PR #8 merged into `main`; public release [v0.6.0](https://github.com/lhylvsea/lvsea-writing/releases/tag/v0.6.0) published at commit `7184be8d667b47c043c664034e4484c1b611ab53`
 
 ## Reference skills studied
 
@@ -41,6 +41,6 @@
 - package: validate_package.py PASS; manifest/interface/root entrypoint and local links checked.
 - trigger: 25/25 v0.6.0 cases pass across should-trigger, should-not-trigger, near-neighbor and adversarial buckets, including plain/deslopify positives and plain-writing explanation-only negatives.
 - runtime: the standard-library checker remains the only deterministic text checker; it now returns bounded `review_score`, `review_band` and `review_confidence` fields.
-- install: v0.6.0 local synchronization and installation gates are pending; the previous v0.5.0 source-file SHA-256 comparison had no missing or mismatched files and both local roots were backed up before synchronization.
+- install: v0.6.0 synchronized to `C:\Users\rabbit\.codex\skills\lvsea-writing` and `C:\Users\rabbit\.agents\skills\lvsea-writing`; both `Test-SkillInstall.ps1` gates passed, with no source-file SHA-256 mismatches. The previous local trees were backed up before synchronization.
 - provider/human output: missing evidence; no provider A/B or blind human study is claimed here.
 - deliberately excluded: remote inline execution, detector APIs, model weights, private voice corpus and automatic external publication beyond the requested repository.
