@@ -4,7 +4,7 @@
 
 它不是单纯的“AI 味词典”，也不以规避检测为目标。它更关心一篇文字是否有真实材料、明确判断、具体动作和合适的说话位置，再处理自然表达、节奏与格式。
 
-当前版本：<code>0.5.0</code>
+当前版本：<code>0.6.0</code>
 
 ## 能做什么
 
@@ -15,6 +15,7 @@
 - **写作流水线**：把资料、结构、读者、声音、场景、初稿、最后去 AI 味和人工终审串成一条线；去 AI 味不再抢跑。
 - **统计复查**：输出句长变化、词汇多样性、三元组重复、结构和 Unicode 残留等线索，并明确它们不是作者身份结论。
 - **复查分流**：完整初稿后输出可解释的 `review_score`、分段和置信度，帮助决定只标记、定点修改还是回看结构；不把分数当作检测器裁判。
+- **清楚改写**：按需启用 `plain/deslopify` 模式，用普通词、明确主语和动作、先结论后背景，减少空话和术语堆叠；用户要求时生成 `revision-view.md` 修改对照。
 - **中文、英文和中英混写**：中文规则优先，英文规则单独路由，避免把英文阈值直接硬套到中文。
 
 ## 单入口使用
@@ -84,6 +85,7 @@ npx skills add https://github.com/lhylvsea/lvsea-writing --skill lvsea-writing -
 用 $lvsea-writing 按深度长文流程，从选题、证据、提纲、初稿、审稿到事实核查逐步推进。
 只调用 `$lvsea-writing`：从小红书素材筛选、证据卡和二创简报开始，写成文章，最后一步再做严格去 AI 味。
 完整初稿已经写完：先用本地复查分段找高置信问题，再按最小差异修改，最后做 Humanizer 适配和作者终审。
+用 $lvsea-writing 做 plain/deslopify 改写，让没有项目背景的管理者一遍看懂，保留数字、责任边界和必要术语，并输出修改对照。
 ~~~
 
 ## 推荐主线
@@ -100,6 +102,7 @@ npx skills add https://github.com/lhylvsea/lvsea-writing --skill lvsea-writing -
 2. [安全管理、党建党政与政策解读](examples/02-safety-and-policy.md)
 3. [公众号、知乎与行业解读](examples/03-industry-article.md)
 4. [视频口播与 PPT 页面文字](examples/04-video-and-slide-copy.md)
+5. [Plain/deslopify 清楚改写](examples/05-plain-deslopify.md)
 
 更多中文触发词、输入要求、模式说明和调用示例见 [USAGE.zh-CN.md](USAGE.zh-CN.md)。
 
@@ -133,10 +136,11 @@ JSON 报告中的 `review_score`（0–100）、`review_band` 和 `review_confid
 - [单入口专家路由](references/specialist-routing.md)：三个 Skill 的职责、顺序、交接和降级。
 - [最后编辑适配说明](references/late-humanizer-adapter.md)：`lieflat-less-ai-tone` 的白名单式终稿边界。
 - [Sloptrim 适配说明](references/sloptrim-adapter.md)：检测后分流、保真门、格式边界和取舍记录。
+- [Plain writing 适配说明](references/plain-writing-adapter.md)：通俗表达、`deslopify` 模式、修改对照和中文体裁边界。
 
 ## 来源与许可证
 
-本项目为独立整理和改写，不复制上游 Skill 的完整文件、示例、检查器实现、数据集或模型权重。详细 revision、许可证和取舍记录见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 与 [source-matrix.md](references/source-matrix.md)。本轮参考了 Apache-2.0 的 `sloptrim` v0.9.4，但没有把它的代码、钩子或英文词表打包进本仓库。
+本项目为独立整理和改写，不复制上游 Skill 的完整文件、示例、检查器实现、数据集或模型权重。详细 revision、许可证和取舍记录见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 与 [source-matrix.md](references/source-matrix.md)。本轮继续参考了 Apache-2.0 的 `sloptrim` v0.9.4 和 MIT 的 `plain-writing-skill`，只吸收可解释的规则与输出合同，没有把它们的代码、评测数据、钩子或英文词表打包进本仓库。
 
 项目代码以 MIT License 发布，见 [LICENSE](LICENSE)。
 

@@ -21,6 +21,19 @@ The requested source was reviewed read-only at [seyedehsanhadi/sloptrim](https:/
 
 The upstream detector was not executed as a dependency and its code was not copied. The local score is intentionally not comparable to `sloptrim`'s `ai_tell_score`; both remain review heuristics rather than authorship evidence.
 
+## 2026-10-14 incremental review: plain-writing-skill
+
+The requested source was reviewed read-only at [docwriter-org/plain-writing-skill](https://github.com/docwriter-org/plain-writing-skill), main revision `f0d3630983ac7a82aa580f1c1509d72df739ee12`, under MIT. The source contains a root README, one nested `skills/plain-writing/SKILL.md`, and optional model-based eval material. Its useful contribution is a plain-language editing contract: common words, necessary term definitions, explicit subjects and actions, consistent terminology, conclusion-first structure, removal of empty emphasis, rhetorical-question stacks, fake agency and unclear pointers, plus a `deslopify` command that returns only the rewrite unless a comparison is requested.
+
+| Decision | Result |
+| --- | --- |
+| `keep` | ordinary words, concrete subjects and actions, term consistency, conclusion-first context, ordered explanation, empty-emphasis and slogan cleanup, optional change view |
+| `adapt` | make plain language an explicit `lvsea-writing` mode; preserve Chinese genre, technical terms, author voice, formal formatting and natural sentence rhythm; add a local `revision-view.md` contract |
+| `reject` | universal boring style, mandatory long sentences, banning every dash or analogy, English dictionary thresholds, copying the 67-task eval dataset or claiming its model results as local evidence |
+| `invent` | a Chinese-first `plain/deslopify` route that can run before or after a complete draft, while keeping research, evidence, Humanizer and author final review in control |
+
+The upstream evals were not rerun. No upstream code, dataset, history or generated result was copied. The new mode is validated by the local trigger regression and package checks, while actual writing quality remains missing provider or human-blind evidence.
+
 ## Article findings
 
 The referenced article divides writing into research, structure, reader collaboration,

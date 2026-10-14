@@ -16,6 +16,7 @@
 | [larashero3-dotcom/lieflat-less-ai-tone](https://github.com/larashero3-dotcom/lieflat-less-ai-tone) | `27d29232f10124db904ca9c0536d0b67cb3b2833`；MIT | 白名单式最后编辑、信息守恒、结构不动、命中样本审计、排除不稳健特征 | 整套上游 Skill、语料、脚本、统计阈值和独立入口触发 |
 
 | [seyedehsanhadi/sloptrim](https://github.com/seyedehsanhadi/sloptrim) | `38dbb7cb4e97de0b9bf157903c95bdcab016dda2`；v0.9.4；Apache-2.0 | 完整成稿后检测、模式族分流、复查分段与置信度、关键信息保留、两轮反查、代码/格式保护 | Claude 专属钩子、英文词表与阈值、富文档重建、自动覆盖、外部检测服务和规避检测承诺 |
+| [docwriter-org/plain-writing-skill](https://github.com/docwriter-org/plain-writing-skill) | `f0d3630983ac7a82aa580f1c1509d72df739ee12`；MIT；2026-10-14 审阅 | 普通词、必要术语先定义、主语和动作明确、先结论后背景、顺序表达、空话与口号清理、`deslopify` 与修改对照合同 | 把“plain/boring”变成所有体裁的统一风格、强制长句、禁止所有破折号/比喻/缩写、上游评测数据和英文词典规则 |
 
 ## 本轮主线升级来源
 

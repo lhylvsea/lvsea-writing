@@ -1,12 +1,13 @@
 interface:
   display_name: "Lvsea Writing Boss"
-  short_description: "单入口中文事实写作路由：先研究和成稿，完整初稿后做可解释复查，再严格去 AI 味和人工终审"
-  default_prompt: "使用 $lvsea-writing 作为唯一入口，先判断是小红书素材研究、普通写作还是完整成稿后处理；需要素材雷达时调用 $lvsea-xiezuo，完整初稿后用本地检查器做复查分流，需要最后白名单式去 AI 味时调用 $lieflat-less-ai-tone，其他阶段由本 Skill 完成。不要同时加载全部专家，最后保留事实核查与人工终审门。"
+  short_description: "单入口中文事实写作路由：先研究和成稿，按需清楚改写，完整初稿后复查，再严格去 AI 味和人工终审"
+  default_prompt: "使用 $lvsea-writing 作为唯一入口，先判断是小红书素材研究、普通写作、plain/deslopify 清楚改写还是完整成稿后处理；需要素材雷达时调用 $lvsea-xiezuo，完整初稿后用本地检查器做复查分流，需要最后白名单式去 AI 味时调用 $lieflat-less-ai-tone，其他阶段由本 Skill 完成。Plain 模式先说结论、用普通词、保留必要术语，用户要求时输出 revision-view。不要同时加载全部专家，最后保留事实核查与人工终审门。"
   examples:
     - "用 $lvsea-writing 把这批资料先整理成证据账本和文章主线，再逐段写稿，最后才去 AI 味。"
     - "用 $lvsea-writing 学我的样本和场景语气，不要先套人味提示词，也不要编造经历。"
     - "用 $lvsea-writing 写一篇技术教程，研究、结构、代码和链接核验后，再做最后审校。"
     - "先用 $lvsea-writing 检测，不改原文；给出问题、复查分段、证据边界和最小修改方案。"
+    - "用 $lvsea-writing 做 plain/deslopify 改写，让没有项目背景的管理者一遍看懂，保留数字、责任边界和必要术语，并说明改了什么。"
     - "从小红书素材开始写一篇文章：先走素材证据和二创简报，再完成正文，最后严格去 AI 味。"
 compatibility:
   canonical_format: "agent-skills"
@@ -18,7 +19,7 @@ compatibility:
     - "vscode"
   activation:
     mode: "implicit-or-explicit"
-    paths: ["$lvsea-writing", "写作流水线", "最后去 AI 味", "先研究再写", "复查分段"]
+    paths: ["$lvsea-writing", "写作流水线", "最后去 AI 味", "先研究再写", "复查分段", "通俗一点", "plain", "deslopify", "修改对照"]
   execution:
     context: "inline"
     shell: "bash-or-powershell"
